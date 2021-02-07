@@ -13,3 +13,4 @@
 - Create repository and send invitation to prof
 - Fill .gitignore
 - Create empty doc folder
+- Instantiate given template

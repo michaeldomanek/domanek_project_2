@@ -2,9 +2,7 @@
 ** [Unreleased]
 *** Added
 - xxx
-- xxx
 *** Changed
-- xxx
 - xxx
 *** Removed
 - xxx
@@ -14,3 +12,13 @@
 - Fill .gitignore
 - Create empty doc folder
 - Instantiate given template
+
+** [0.0.2] - 2020-02-15
+*** Added
+- 
+*** Changed
+- Changed Readme (Software)
+- Changed meson build and options with new software
+*** Removed
+- Tested hello_imgui but removed it
+- Tested tabulate but removed it

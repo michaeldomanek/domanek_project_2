@@ -18,8 +18,6 @@ project('RobotGame', 'cpp',
 # # spdlog: https://github.com/gabime/spdlog
 # add_global_arguments('-I' + get_option('spdlog_include_dir'), language : 'cpp')
 
-# add additional include global arguments appropriately!
-
 # # begin protobuf: https://developers.google.com/protocol-buffers/
 # # protobuf: must be installed independently and has to be found...
 # protoc = find_program('protoc', required : true)
@@ -33,13 +31,11 @@ project('RobotGame', 'cpp',
 # generated = gen.process('src/dummy.proto')
 # # end protobuf
 
-# subdir('SUBDIR1')
-
 inc_dir = include_directories('include')
-src = ['src/guilitetest.cpp']
+src = ['src/main.cpp']
 #protobuf: src = ['src/main.cpp', generated]
 
-executable('EXENAME',
+executable('robo',
            sources : src,
            include_directories : inc_dir,
 #           dependencies : [thread_dep, protobuf_dep]

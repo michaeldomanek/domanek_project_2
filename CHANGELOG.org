@@ -15,7 +15,8 @@
 
 ** [0.0.2] - 2020-02-15
 *** Added
-- 
+- Added smfl libary
+- Added smfl example in main
 *** Changed
 - Changed Readme (Software)
 - Changed meson build and options with new software

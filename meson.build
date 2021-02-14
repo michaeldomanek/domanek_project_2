@@ -31,12 +31,17 @@ project('RobotGame', 'cpp',
 # generated = gen.process('src/dummy.proto')
 # # end protobuf
 
-inc_dir = include_directories('include')
+# inc_dir = include_directories('include')
 src = ['src/main.cpp']
 #protobuf: src = ['src/main.cpp', generated]
 
+graphics = dependency('sfml-graphics')
+window = dependency('sfml-window')
+
 executable('robo',
            sources : src,
-           include_directories : inc_dir,
+#           requires : pkg.generate(lib),
+#           include_directories : inc_dir,
 #           dependencies : [thread_dep, protobuf_dep]
-          )
+           dependencies : [graphics, window]
+)

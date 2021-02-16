@@ -1,16 +1,16 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <cstdint>
-#include <unistd.h>
+#include <vector>
 #include <math.h>
+#include <algorithm>
 
 using namespace std;
 
+const unsigned int width = 700;
+const unsigned int height = 700;
+const unsigned int robotWidth = 36;
 
-int main()
-{
-    const unsigned width = 700;
-    const unsigned height= 700;
+int main() {
 
     sf::RenderWindow window(sf::VideoMode(width, height), "Robotgame");
     window.setFramerateLimit(60);
@@ -29,16 +29,33 @@ int main()
     sf::Sprite turret;
     robot.setTexture(robotTexture);
     turret.setTexture(turretTexture);
-
+    
     robot.setOrigin(robot.getLocalBounds().width / 2, robot.getLocalBounds().height / 2);
     turret.setOrigin(turret.getLocalBounds().width / 2, turret.getLocalBounds().height / 2);
 
     robot.setPosition(200, 200);
     turret.setPosition(200, 200);
 
-    while (window.isOpen()) {
+    // vector<sf::FloatRect> walls;
+    // walls.push_back(sf::FloatRect(0, 0, 700, 1));
+    // walls.push_back(sf::FloatRect(0, 0, 1, 700));
+    // walls.push_back(sf::FloatRect(700, 700, -700, 1));
+    // walls.push_back(sf::FloatRect(700, 700, 1, -700));
 
+    // bool intersects = false;
+
+    while (window.isOpen()) {
         window.clear(sf::Color::White);
+
+        // sf::FloatRect player = robot.getGlobalBounds();
+        
+        // intersects = false;
+
+        // for (auto const& wall: walls) {
+        //     intersects = intersects || player.intersects(wall);
+        // }
+
+        // if (!intersects) {
 
         if (sf::Keyboard::isKeyPressed( sf::Keyboard::A )) {
             robot.setRotation(robot.getRotation() - 1);
@@ -61,6 +78,11 @@ int main()
         } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::E )) {
             turret.setRotation(turret.getRotation() + 1.5);
         }
+
+        // } else {
+        //     cout << "intersect" << endl;
+        // }
+        
         
 
         // if (sprite.getRotation() == 0 && sprite.getPosition().y >= height - sprite.getGlobalBounds().height / 2) {
@@ -84,8 +106,6 @@ int main()
         window.draw(robot);
         window.draw(turret);
         window.display();
-        
-        // usleep(5000);
     }
 
     return 0;

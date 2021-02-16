@@ -17,3 +17,8 @@ Netzwerk‐basiertes RobotGame wie robowiki mit zentralem Server.
 
 
 * [sfml](https://github.com/SFML/SFML)
+
+## Spiel
+
+Das Spiel ist eine abgeänderte Version von [robowiki](https://robowiki.net/wiki/Main_Page).
+Die Resourcen des Spiel wurden von [robocode](https://github.com/robo-code/robocode) verwendet.

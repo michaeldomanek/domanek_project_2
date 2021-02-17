@@ -34,7 +34,7 @@
 #custom
 build/
 builddir/
-!.gitkeep
+!builddir/.gitkeep
 .vscode/
 old/
 

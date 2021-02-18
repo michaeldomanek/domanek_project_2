@@ -1,7 +1,7 @@
 # uncomment as necessary
 project('RobotGame', 'cpp',
         license : ['Boost'],
-        version : '0.1',
+        version : '0.0.3',
         default_options : ['cpp_std=c++17', 'warning_level=3', 'werror=true'])
 
 # thread_dep = dependency('threads')
@@ -31,8 +31,8 @@ project('RobotGame', 'cpp',
 # generated = gen.process('src/dummy.proto')
 # # end protobuf
 
-# inc_dir = include_directories('include')
-src = ['src/main.cpp']
+inc_dir = include_directories('include')
+src = ['src/main.cpp', 'src/bullet.cpp']
 #protobuf: src = ['src/main.cpp', generated]
 
 graphics = dependency('sfml-graphics')
@@ -40,8 +40,7 @@ window = dependency('sfml-window')
 
 executable('robo',
            sources : src,
-#           requires : pkg.generate(lib),
-#           include_directories : inc_dir,
+           include_directories : inc_dir,
 #           dependencies : [thread_dep, protobuf_dep]
            dependencies : [graphics, window]
 )

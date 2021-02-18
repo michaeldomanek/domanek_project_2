@@ -15,7 +15,7 @@ int main() {
     vector<Bullet> bullets;
 
     sf::RenderWindow window(sf::VideoMode(width, width), "Robotgame");
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(120);
 
     sf::Image icon;
     icon.loadFromFile("../src/resources/icon.png");
@@ -39,12 +39,9 @@ int main() {
     robot.setScale(1.5, 1.5);
     turret.setScale(1.5, 1.5);
 
-    vector<sf::FloatRect> walls;
-    walls.push_back(sf::FloatRect(0, 0, width, 1));
-    walls.push_back(sf::FloatRect(0, 0, 1, width));
-    walls.push_back(sf::FloatRect(0, width, width, -1));
-    walls.push_back(sf::FloatRect(width, 0, -1, width));
+    sf::FloatRect wall{0, 0, width, width};
 
+    sf::Clock fireCountdown;
 
     while (window.isOpen()) {
         window.clear(sf::Color::Black);
@@ -74,9 +71,10 @@ int main() {
         }
 
         if (sf::Keyboard::isKeyPressed( sf::Keyboard::Space )) {
-            if(bullets.size() < 100) {
-                bullets.push_back(Bullet{turret, 3});
-            }   
+            if (fireCountdown.getElapsedTime().asMilliseconds() > 500) {
+                bullets.push_back(Bullet{turret, 6});
+                fireCountdown.restart();
+            }
         }
 
         for(auto &bullet: bullets) {
@@ -85,14 +83,10 @@ int main() {
 
         for (vector<Bullet>::iterator bullet = bullets.begin(); bullets.size() > 0 && bullet != bullets.end(); ++bullet) {            
             sf::FloatRect bulletRect {bullet->getSprite().getGlobalBounds()};
-            for(auto const &wall: walls) {
-                if(bulletRect.intersects(wall)){            
-                    bullets.erase(bullet);
-                    break;
-                }
+            if(!bulletRect.intersects(wall)){        
+                bullets.erase(bullet);
             }
         }
-        
 
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -101,8 +95,7 @@ int main() {
         }
 
         for(auto &bullet: bullets) {
-            window.draw(bullet.getSprite());
-            cout << bullets.size() << endl;
+            window.draw(bullet.getSprite());            
         }
 
         window.draw(robot);

@@ -14,11 +14,11 @@ float Bullet::getSpeed() {
     return speed;
 }
 
-void Bullet::move_(float speedX, float speedY) {
+sf::Vector2f Bullet::getMoveVector(float speed) {
     float angle = sprite.getRotation() * M_PI / 180;
-    sprite.move(sin(angle) * speedX, cos(angle) * -speedY);
+    return sf::Vector2f{sin(angle) * speed, cos(angle) * -speed};
 }
 
 void Bullet::move() {
-    move_(speed, speed);
+    sprite.move(movement.x, movement.y);
 }

@@ -7,7 +7,8 @@ class Bullet {
         sf::Sprite sprite;
         float speed;
         float damage;
-        void move_(float, float);
+        sf::Vector2f movement;
+        sf::Vector2f getMoveVector(float speed);
     public:
         Bullet(sf::Sprite turret, float speed): 
             speed(speed) 
@@ -21,7 +22,9 @@ class Bullet {
                 sprite.setColor(sf::Color::White);
                 sprite.setOrigin(1, 1);
                 sprite.setScale(1.5, 1.5);
-                move_(25 * 1.5, 25 * 1.5);
+
+                movement = getMoveVector(speed);
+                sprite.move(25 * 1.5 * movement.x / speed, 25 * 1.5 * movement.y / speed);
             };
         sf::Sprite getSprite();
         float getSpeed();

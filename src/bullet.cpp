@@ -1,4 +1,4 @@
-#include "../include/bullet.h"
+#include "bullet.h"
 
 #include <iostream>
 #include <math.h>

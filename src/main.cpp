@@ -1,10 +1,9 @@
-#include "../include/bullet.h"
+#include "bullet.h"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
 #include <math.h>
-#include <utility>
 
 using namespace std;
 

@@ -1,4 +1,5 @@
 #include "bullet.h"
+#include "robot.h"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -20,61 +21,43 @@ int main() {
     icon.loadFromFile("../src/resources/icon.png");
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
-    sf::Texture robotTexture;
-    robotTexture.loadFromFile("../src/resources/body2.png");
-
-    sf::Texture turretTexture;
-    turretTexture.loadFromFile("../src/resources/turret.png");
-
-    sf::Sprite robot{robotTexture};
-    sf::Sprite turret{turretTexture};
-    
-    robot.setOrigin(robot.getLocalBounds().width / 2, robot.getLocalBounds().height / 2);
-    turret.setOrigin(turret.getLocalBounds().width / 2, turret.getLocalBounds().height / 2);
-
-    robot.setPosition(200, 200);
-    turret.setPosition(200, 200);
-
-    robot.setScale(1.5, 1.5);
-    turret.setScale(1.5, 1.5);
-
     sf::FloatRect wall{0, 0, width, width};
 
-    sf::Clock fireCountdown;
+    Robot robo{"robot1", 2.5f};
 
     while (window.isOpen()) {
         window.clear(sf::Color::Black);
 
+        robo.stopMove();
+        robo.stopRotate();
+        robo.stopRotateWeapon();
+
         if (sf::Keyboard::isKeyPressed( sf::Keyboard::A )) {
-            robot.setRotation(robot.getRotation() - 1);
-            turret.setRotation(turret.getRotation() - 1);
+            robo.rotateLeft();
         } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::D )) {
-            robot.setRotation(robot.getRotation() + 1);
-            turret.setRotation(turret.getRotation() + 1);
+            robo.rotateRight();
         }
 
-        if (sf::Keyboard::isKeyPressed( sf::Keyboard::S )) {
-            float angle{robot.getRotation() * (float)M_PI / 180.0f};
-            robot.move(sin(angle) * -2, cos(angle) * 2);
-            turret.move(sin(angle) * -2, cos(angle) * 2);
-        } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::W )) {
-            float angle{robot.getRotation() * (float)M_PI / 180.0f};
-            robot.move(sin(angle) * 2, cos(angle) * -2);
-            turret.move(sin(angle) * 2, cos(angle) * -2);
+        if (sf::Keyboard::isKeyPressed( sf::Keyboard::W )) {
+            robo.moveForward();
+        } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::S )) {
+            robo.moveBackward();
         }
 
         if (sf::Keyboard::isKeyPressed( sf::Keyboard::Q )) {
-            turret.setRotation(turret.getRotation() - 1.5);
+            robo.rotateWeaponLeft();
         } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::E )) {
-            turret.setRotation(turret.getRotation() + 1.5);
+            robo.rotateWeaponRight();
         }
 
         if (sf::Keyboard::isKeyPressed( sf::Keyboard::Space )) {
-            if (fireCountdown.getElapsedTime().asMilliseconds() > 500) {
-                bullets.push_back(Bullet{turret, 6});
-                fireCountdown.restart();
+            if(auto bullet = robo.shoot()) {
+                bullets.push_back(bullet.value());
             }
         }
+
+        robo.performActions();
+        robo.drawRobot(&window);
 
         for(auto &bullet: bullets) {
             bullet.move();
@@ -96,9 +79,7 @@ int main() {
         for(auto &bullet: bullets) {
             window.draw(bullet.getSprite());            
         }
-
-        window.draw(robot);
-        window.draw(turret);        
+     
         window.display();
     }
 }

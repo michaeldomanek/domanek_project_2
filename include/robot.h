@@ -1,7 +1,10 @@
 #pragma once
 
+#include "bullet.h"
+
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <optional>
 
 class Robot {
     private:
@@ -11,23 +14,29 @@ class Robot {
         const float robotRotion{1};
         const float turretRotation{1.5f};
 
+        char moveSign{};
+        char rotateSign{};
+        char rotateTurretSign{};
+
         sf::Clock fireCountdown;
+
+        sf::Texture robotTexture;
+        sf::Texture turretTexture;
         sf::Sprite robot;
         sf::Sprite turret;
+        
         sf::Vector2f movement;
         sf::Vector2f getMoveVector();
-        void move(short sign);
-        void rotate(short sign);
-        void rotateWeapon(short sign);
+
+        void move();
+        void rotate();
+        void rotateWeapon();
     public:
         Robot(std::string name, float speed):
         name(name),
         speed(speed)
         {
-                sf::Texture robotTexture;
                 robotTexture.loadFromFile("../src/resources/body2.png");
-
-                sf::Texture turretTexture;
                 turretTexture.loadFromFile("../src/resources/turret.png");
 
                 robot.setTexture(robotTexture);
@@ -49,14 +58,17 @@ class Robot {
 
         void rotateLeft();
         void rotateRight();
-        vpod stopRotate();
+        void stopRotate();
         
         void rotateWeaponLeft();
         void rotateWeaponRight();
-        void stopRotate();
+        void stopRotateWeapon();
 
-        void shoot();
+        std::optional<Bullet> shoot();
         void stopShoot();
+
+        void performActions();
+        void drawRobot(sf::RenderWindow*);
 
         sf::Vector2f getPosition();
         float getRotation();

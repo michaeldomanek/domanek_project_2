@@ -1,38 +1,82 @@
 #include "robot.h"
+#include "bullet.h"
 
 #include <SFML/Graphics.hpp>
 #include <math.h>
+#include <optional>
 
 void Robot::move() {
-    robot.move(movement.x, movement.y);
-    turret.move(movement.x, movement.y);
+    if (moveSign) {
+        robot.move(movement.x * moveSign, movement.y * moveSign);
+        turret.move(movement.x * moveSign, movement.y * moveSign);
+    }
 }
 
-void Robot::rotate(short sign) {
-    robot.setRotation(robot.getRotation() + (robotRotion * sign));
-    turret.setRotation(turret.getRotation() + (robotRotion * sign));
-
-    movement = getMoveVector();
+void Robot::moveForward() {
+    moveSign = 1;
 }
 
-void Robot::stop() {
-    movement = sf::Vector2f{0, 0};
+void Robot::moveBackward() {
+    moveSign = -1;
 }
 
-void Robot::rotateWeapon(short sign) {
-    turret.setRotation(turret.getRotation() + (turretRotation * sign));
+void Robot::stopMove() {
+    moveSign = false;
+}
+
+void Robot::rotate() {
+    if (rotateSign) {
+        robot.setRotation(robot.getRotation() + (robotRotion * rotateSign));
+        turret.setRotation(turret.getRotation() + (robotRotion * rotateSign));
+
+        movement = getMoveVector();
+    }
+
+}
+
+void Robot::rotateLeft() {
+    rotateSign = -1;
+}
+
+void Robot::rotateRight() {
+    rotateSign = 1;
+}
+
+void Robot::stopRotate() {
+    rotateSign = false;
+}
+
+void Robot::rotateWeapon() {
+    if (rotateTurretSign) {
+        turret.setRotation(turret.getRotation() + (turretRotation * rotateTurretSign));
+    }
 }
 
 void Robot::rotateWeaponLeft() {
-    rotateWeapon(-1);
+    rotateTurretSign = -1;
 }
 
 void Robot::rotateWeaponRight() {
-    rotateWeapon(1);
+    rotateTurretSign = 1;
 }
 
-void Robot::shoot() {
+void Robot::stopRotateWeapon() {
+    rotateTurretSign = false;
+}
 
+std::optional<Bullet> Robot::shoot() {
+    if (fireCountdown.getElapsedTime().asMilliseconds() > 500) {
+        // bullets.push_back(Bullet{turret, 6});
+        fireCountdown.restart();
+        return Bullet{turret, 5};
+    }
+    return {};
+}
+
+void Robot::performActions() {
+    move();
+    rotate();
+    rotateWeapon();
 }
 
 sf::Vector2f Robot::getPosition() {
@@ -45,6 +89,11 @@ float Robot::getRotation() {
 
 float Robot::getTurretRotation() {
     return turret.getRotation();
+}
+
+void Robot::drawRobot(sf::RenderWindow *window) {
+    window->draw(robot);
+    window->draw(turret);
 }
 
 sf::Vector2f Robot::getMoveVector() {

@@ -49,7 +49,6 @@ void Window::showRobots() {
     }
 }
 
-
 void Window::draw() {
     showAllBullets();
     showRobots();

@@ -9,8 +9,6 @@
 
 using namespace std;
 
-const unsigned int width{1000};
-
 int main() {
     Robot robo{"robot1", 2.0f};
     Robot robo2{"robot1", 2.0f};

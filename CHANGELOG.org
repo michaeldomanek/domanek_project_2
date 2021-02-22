@@ -7,12 +7,29 @@
 *** Removed
 - xxx
 
-** [0.0.1] - 2020-02-08
+
+** [0.0.4] - 2020-02-29
 *** Added
-- Create repository and send invitation to prof
-- Fill .gitignore
-- Create empty doc folder
-- Instantiate given template
+- xxx
+*** Changed
+- xxx
+*** Removed
+- xxx
+
+
+** [0.0.3] - 2020-02-22
+*** Added
+- Added robowiki resources
+- Added keyboard controll for example application
+- Added Robot class to control the robot
+- Added Bullet class to shoot
+- Added Window class to controll the graphical interface
+*** Changed
+- Changed Robot class to be more performant (cache movement vector)
+- Changed Bullet class to be more performant (save movement in constructor)
+*** Removed
+- removed unnecessary template files
+
 
 ** [0.0.2] - 2020-02-15
 *** Added
@@ -25,10 +42,10 @@
 - Tested hello_imgui but removed it
 - Tested tabulate but removed it
 
-** [0.0.3] - 2020-02-22
+
+** [0.0.1] - 2020-02-08
 *** Added
-- xxx
-*** Changed
-- xxx
-*** Removed
-- xxx
+- Create repository and send invitation to prof
+- Fill .gitignore
+- Create empty doc folder
+- Instantiate given template

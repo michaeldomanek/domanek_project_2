@@ -1,5 +1,6 @@
 #include "bullet.h"
 #include "robot.h"
+#include "window.h"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -9,28 +10,22 @@
 using namespace std;
 
 const unsigned int width{1000};
-const unsigned int robotWidth{38};
 
 int main() {
-    vector<Bullet> bullets;
-
-    sf::RenderWindow window(sf::VideoMode(width, width), "Robotgame");
-    window.setFramerateLimit(120);
-
-    sf::Image icon;
-    icon.loadFromFile("../src/resources/icon.png");
-    window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-
-    sf::FloatRect wall{0, 0, width, width};
-
-    Robot robo{"robot1", 2.5f};
+    Robot robo{"robot1", 2.0f};
+    Robot robo2{"robot1", 2.0f};
+    Window window{950};
+    window.addRobot(&robo);
+    window.addRobot(&robo2);
 
     while (window.isOpen()) {
-        window.clear(sf::Color::Black);
+        window.clear();
 
         robo.stopMove();
+        robo2.stopMove();
         robo.stopRotate();
         robo.stopRotateWeapon();
+        robo.stopShooting();
 
         if (sf::Keyboard::isKeyPressed( sf::Keyboard::A )) {
             robo.rotateLeft();
@@ -44,6 +39,12 @@ int main() {
             robo.moveBackward();
         }
 
+        if (sf::Keyboard::isKeyPressed( sf::Keyboard::Up )) {
+            robo2.moveForward();
+        } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::Down )) {
+            robo2.moveBackward();
+        }
+
         if (sf::Keyboard::isKeyPressed( sf::Keyboard::Q )) {
             robo.rotateWeaponLeft();
         } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::E )) {
@@ -51,34 +52,29 @@ int main() {
         }
 
         if (sf::Keyboard::isKeyPressed( sf::Keyboard::Space )) {
-            if(auto bullet = robo.shoot()) {
-                bullets.push_back(bullet.value());
-            }
+            robo.startShooting();
         }
 
         robo.performActions();
-        robo.drawRobot(&window);
+        robo2.performActions();
+        window.moveAllBullets();
+        window.handleEvent();
+        window.draw();
 
-        for(auto &bullet: bullets) {
-            bullet.move();
-        }
+        // for(auto &bullet: bullets) {
+        //     bullet.move();
+        // }
 
-        for (vector<Bullet>::iterator bullet = bullets.begin(); bullets.size() > 0 && bullet != bullets.end(); ++bullet) {            
-            sf::FloatRect bulletRect {bullet->getSprite().getGlobalBounds()};
-            if(!bulletRect.intersects(wall)){        
-                bullets.erase(bullet);
-            }
-        }
+        // for (vector<Bullet>::iterator bullet = bullets.begin(); bullets.size() > 0 && bullet != bullets.end(); ++bullet) {            
+        //     sf::FloatRect bulletRect {bullet->getSprite().getGlobalBounds()};
+        //     if(!bulletRect.intersects(wall)){        
+        //         bullets.erase(bullet);
+        //     }
+        // }
 
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        for(auto &bullet: bullets) {
-            window.draw(bullet.getSprite());            
-        }
+        // for(auto &bullet: bullets) {
+        //     window.draw(bullet.getSprite());            
+        // }
      
         window.display();
     }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <vector>
 
 class Bullet {
     private:
@@ -26,7 +27,6 @@ class Bullet {
                 movement = getMoveVector(speed);
                 sprite.move(25 * 1.5 * movement.x / speed, 25 * 1.5 * movement.y / speed);
             };
-        sf::Sprite getSprite();
-        float getSpeed();
         void move();
+        sf::Sprite getSprite();
 };

@@ -1,9 +1,9 @@
 #include "robot.h"
 #include "bullet.h"
+#include "window.h"
 
 #include <SFML/Graphics.hpp>
 #include <math.h>
-#include <optional>
 
 void Robot::move() {
     if (moveSign) {
@@ -31,7 +31,6 @@ void Robot::rotate() {
 
         movement = getMoveVector();
     }
-
 }
 
 void Robot::rotateLeft() {
@@ -64,19 +63,26 @@ void Robot::stopRotateWeapon() {
     rotateTurretSign = false;
 }
 
-std::optional<Bullet> Robot::shoot() {
-    if (fireCountdown.getElapsedTime().asMilliseconds() > 500) {
-        // bullets.push_back(Bullet{turret, 6});
+void Robot::shoot() {
+    if (wantToShoot && fireCountdown.getElapsedTime().asMilliseconds() > 500) {
+        Window::addBullet(turret, 5);
         fireCountdown.restart();
-        return Bullet{turret, 5};
     }
-    return {};
+}
+
+void Robot::startShooting() {
+    wantToShoot = true;
+}
+
+void Robot::stopShooting() {
+    wantToShoot = false;
 }
 
 void Robot::performActions() {
     move();
     rotate();
     rotateWeapon();
+    shoot();
 }
 
 sf::Vector2f Robot::getPosition() {
@@ -91,9 +97,12 @@ float Robot::getTurretRotation() {
     return turret.getRotation();
 }
 
-void Robot::drawRobot(sf::RenderWindow *window) {
-    window->draw(robot);
-    window->draw(turret);
+const sf::Sprite& Robot::getRobotSprite() {
+    return robot;
+}
+
+const sf::Sprite& Robot::getTurretSprite() {
+    return turret;
 }
 
 sf::Vector2f Robot::getMoveVector() {

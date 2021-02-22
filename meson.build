@@ -32,7 +32,7 @@ project('RobotGame', 'cpp',
 # # end protobuf
 
 inc_dir = include_directories('include')
-src = ['src/main.cpp', 'src/bullet.cpp', 'src/robot.cpp']
+src = ['src/main.cpp', 'src/bullet.cpp', 'src/robot.cpp', 'src/window.cpp']
 #protobuf: src = ['src/main.cpp', generated]
 
 graphics = dependency('sfml-graphics')

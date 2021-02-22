@@ -4,7 +4,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
-#include <optional>
 
 class Robot {
     private:
@@ -17,6 +16,7 @@ class Robot {
         char moveSign{};
         char rotateSign{};
         char rotateTurretSign{};
+        bool wantToShoot;
 
         sf::Clock fireCountdown;
 
@@ -31,6 +31,7 @@ class Robot {
         void move();
         void rotate();
         void rotateWeapon();
+        void shoot();
     public:
         Robot(std::string name, float speed):
         name(name),
@@ -50,6 +51,8 @@ class Robot {
 
                 robot.setScale(1.5, 1.5);
                 turret.setScale(1.5, 1.5);
+
+                movement = getMoveVector();
         }
         
         void moveForward();
@@ -64,13 +67,14 @@ class Robot {
         void rotateWeaponRight();
         void stopRotateWeapon();
 
-        std::optional<Bullet> shoot();
-        void stopShoot();
+        void startShooting();
+        void stopShooting();
 
         void performActions();
-        void drawRobot(sf::RenderWindow*);
 
         sf::Vector2f getPosition();
         float getRotation();
         float getTurretRotation();
+        const sf::Sprite& getRobotSprite();
+        const sf::Sprite& getTurretSprite();
 };

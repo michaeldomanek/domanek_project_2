@@ -1,6 +1,6 @@
 #include "bullet.h"
-#include "robot.h"
 #include "window.h"
+#include "robot.h"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -10,9 +10,9 @@
 using namespace std;
 
 int main() {
-    Robot robo{"robot1", 2.0f};
-    Robot robo2{"robot1", 2.0f};
-    Window window{950};
+    Robot robo{"robot1", 0, 0};
+    Robot robo2{"robot2", 250, 250};
+    Window& window{Window::getInstance()};
     window.addRobot(&robo);
     window.addRobot(&robo2);
 
@@ -20,7 +20,6 @@ int main() {
         window.clear();
 
         robo.stopMove();
-        robo2.stopMove();
         robo.stopRotate();
         robo.stopRotateWeapon();
         robo.stopShooting();
@@ -37,12 +36,6 @@ int main() {
             robo.moveBackward();
         }
 
-        if (sf::Keyboard::isKeyPressed( sf::Keyboard::Up )) {
-            robo2.moveForward();
-        } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::Down )) {
-            robo2.moveBackward();
-        }
-
         if (sf::Keyboard::isKeyPressed( sf::Keyboard::Q )) {
             robo.rotateWeaponLeft();
         } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::E )) {
@@ -54,26 +47,12 @@ int main() {
         }
 
         robo.performActions();
-        robo2.performActions();
+        
         window.moveAllBullets();
+        window.bulletHit();
+
         window.handleEvent();
-        window.draw();
-
-        // for(auto &bullet: bullets) {
-        //     bullet.move();
-        // }
-
-        // for (vector<Bullet>::iterator bullet = bullets.begin(); bullets.size() > 0 && bullet != bullets.end(); ++bullet) {            
-        //     sf::FloatRect bulletRect {bullet->getSprite().getGlobalBounds()};
-        //     if(!bulletRect.intersects(wall)){        
-        //         bullets.erase(bullet);
-        //     }
-        // }
-
-        // for(auto &bullet: bullets) {
-        //     window.draw(bullet.getSprite());            
-        // }
-     
+        window.draw();     
         window.display();
     }
 }

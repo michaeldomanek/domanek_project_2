@@ -7,16 +7,6 @@
 *** Removed
 - xxx
 
-
-** [0.0.4] - 2020-02-29
-*** Added
-- xxx
-*** Changed
-- xxx
-*** Removed
-- xxx
-
-
 ** [0.0.3] - 2020-02-22
 *** Added
 - Added robowiki resources

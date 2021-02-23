@@ -1,14 +1,25 @@
-#include "robot.h"
 #include "bullet.h"
 #include "window.h"
+#include "robot.h"
 
 #include <SFML/Graphics.hpp>
 #include <math.h>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
 
 void Robot::move() {
     if (moveSign) {
         robot.move(movement.x * moveSign, movement.y * moveSign);
         turret.move(movement.x * moveSign, movement.y * moveSign);
+
+        if (robot.getGlobalBounds().intersects(robotBorder)) {
+            float posX{min(max(robotBorder.left, robot.getPosition().x), robotBorder.width)};
+            float posY{min(max(robotBorder.top, robot.getPosition().y), robotBorder.height)};
+            robot.setPosition(posX, posY);
+            turret.setPosition(posX, posY);
+        }
     }
 }
 
@@ -65,7 +76,7 @@ void Robot::stopRotateWeapon() {
 
 void Robot::shoot() {
     if (wantToShoot && fireCountdown.getElapsedTime().asMilliseconds() > 500) {
-        Window::addBullet(turret, 5);
+        Window::addBullet(turret, this, 5, 10);
         fireCountdown.restart();
     }
 }

@@ -1,18 +1,26 @@
 #pragma once
 
+class Robot;
+class Bullet;
+class Window;
+
+#include "robot.h"
+
 #include <SFML/Graphics.hpp>
-#include <vector>
 
 class Bullet {
     private:
         sf::Sprite sprite;
         float speed;
         float damage;
+        Robot* attacker;
         sf::Vector2f movement;
         sf::Vector2f getMoveVector(float speed);
     public:
-        Bullet(sf::Sprite turret, float speed): 
-            speed(speed) 
+        Bullet(sf::Sprite turret, Robot* attacker, float speed, float damage): 
+            speed(speed),
+            damage(damage),
+            attacker(attacker)
             {
                 sf::Texture tex; 
                 tex.create(2, 2);
@@ -29,4 +37,5 @@ class Bullet {
             };
         void move();
         sf::Sprite getSprite();
+        Robot* getAttacker();
 };

@@ -1,4 +1,5 @@
 #include "bullet.h"
+#include "robot.h"
 
 #include <math.h>
 #include <SFML/Graphics.hpp>
@@ -16,4 +17,8 @@ void Bullet::move() {
 
 sf::Sprite Bullet::getSprite() {
     return sprite;
+}
+
+Robot* Bullet::getAttacker() {
+    return attacker;
 }

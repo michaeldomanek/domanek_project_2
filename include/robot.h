@@ -1,9 +1,16 @@
 #pragma once
 
+class Robot;
+class Bullet;
+class Window;
+
 #include "bullet.h"
+#include "window.h"
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <algorithm>
+#include <iostream>
 
 class Robot {
     private:
@@ -19,6 +26,9 @@ class Robot {
         bool wantToShoot;
 
         sf::Clock fireCountdown;
+        Window& window{Window::getInstance()};
+        sf::FloatRect border{window.getBorder()};
+        sf::FloatRect robotBorder;
 
         sf::Texture robotTexture;
         sf::Texture turretTexture;
@@ -33,9 +43,9 @@ class Robot {
         void rotateWeapon();
         void shoot();
     public:
-        Robot(std::string name, float speed):
+        Robot(std::string name, float posX, float posY):
         name(name),
-        speed(speed)
+        speed(2.0f)
         {
                 robotTexture.loadFromFile("../src/resources/body2.png");
                 turretTexture.loadFromFile("../src/resources/turret.png");
@@ -46,13 +56,20 @@ class Robot {
                 robot.setOrigin(robot.getLocalBounds().width / 2, robot.getLocalBounds().height / 2);
                 turret.setOrigin(turret.getLocalBounds().width / 2, turret.getLocalBounds().height / 2);
 
-                robot.setPosition(200, 200);
-                turret.setPosition(200, 200);
-
                 robot.setScale(1.5, 1.5);
                 turret.setScale(1.5, 1.5);
 
                 movement = getMoveVector();
+                robotBorder = {robot.getLocalBounds().width, 
+                               robot.getLocalBounds().height, 
+                               border.width - robot.getLocalBounds().width, 
+                               border.height - robot.getLocalBounds().height};
+
+                posX = std::min(std::max(robotBorder.left, posX), robotBorder.width);
+                posY = std::min(std::max(robotBorder.top, posY), robotBorder.height);
+                robot.setPosition(posX, posY);
+                turret.setPosition(posX, posY);
+
         }
         
         void moveForward();

@@ -17,12 +17,16 @@ void Window::addRobot(Robot *robot) {
     robots.push_back(robot);
 }
 
+vector<Robot*> Window::getRobots() {
+    return robots;
+}
+
 sf::FloatRect Window::getBorder() {
     return border;
 }
 
 void Window::moveAllBullets() {
-    for(Bullet &bullet: bullets) {
+    for(Bullet& bullet: bullets) {
         bullet.move();
     }
 }
@@ -42,7 +46,6 @@ void Window::clear() {
 }
 
 void Window::bulletHit() {
-    // cout << bullets.size() << endl;
     for (vector<Bullet>::iterator bullet = bullets.begin(); bullets.size() > 0 && bullet != bullets.end(); ++bullet) {            
         sf::FloatRect bulletRect {bullet->getSprite().getGlobalBounds()};
 
@@ -81,6 +84,3 @@ void Window::draw() {
 void Window::display() {
     window.display();
 }
-
-vector<Bullet> Window::bullets;
-vector<Robot*> Window::robots;

@@ -14,7 +14,16 @@ void Robot::move() {
         robot.move(movement.x * moveSign, movement.y * moveSign);
         turret.move(movement.x * moveSign, movement.y * moveSign);
 
-        if (robot.getGlobalBounds().intersects(robotBorder)) {
+        sf::FloatRect robotBounds{robot.getGlobalBounds()};
+
+        for(Robot* robo: window.getRobots()) {
+            if (this != robo && robotBounds.intersects(robo->getGlobalBounds())) {
+                robot.move(movement.x * -moveSign, movement.y * -moveSign);
+                turret.move(movement.x * -moveSign, movement.y * -moveSign);
+            }
+        }
+
+        if (robotBounds.intersects(robotBorder)) {
             float posX{min(max(robotBorder.left, robot.getPosition().x), robotBorder.width)};
             float posY{min(max(robotBorder.top, robot.getPosition().y), robotBorder.height)};
             robot.setPosition(posX, posY);
@@ -36,9 +45,17 @@ void Robot::stopMove() {
 }
 
 void Robot::rotate() {
+    robot.setRotation(robot.getRotation() + (robotRotion * rotateSign));
+    turret.setRotation(turret.getRotation() + (robotRotion * rotateSign));
+
     if (rotateSign) {
-        robot.setRotation(robot.getRotation() + (robotRotion * rotateSign));
-        turret.setRotation(turret.getRotation() + (robotRotion * rotateSign));
+        for(Robot* robo: window.getRobots()) {
+            if (this != robo && robot.getGlobalBounds().intersects(robo->getGlobalBounds())) {
+                robot.setRotation(robot.getRotation() + (robotRotion * -rotateSign));
+                turret.setRotation(turret.getRotation() + (robotRotion * -rotateSign));
+                break;
+            }
+        }
 
         movement = getMoveVector();
     }
@@ -76,7 +93,7 @@ void Robot::stopRotateWeapon() {
 
 void Robot::shoot() {
     if (wantToShoot && fireCountdown.getElapsedTime().asMilliseconds() > 500) {
-        Window::addBullet(turret, this, 5, 10);
+        window.addBullet(turret, this, 5, 10);
         fireCountdown.restart();
     }
 }
@@ -114,6 +131,10 @@ const sf::Sprite& Robot::getRobotSprite() {
 
 const sf::Sprite& Robot::getTurretSprite() {
     return turret;
+}
+
+const sf::FloatRect Robot::getGlobalBounds() {
+    return robot.getGlobalBounds();
 }
 
 sf::Vector2f Robot::getMoveVector() {

@@ -12,8 +12,8 @@ class Window;
 
 class Window {
     private:
-        static std::vector<Bullet> bullets;
-        static std::vector<Robot*> robots;
+        std::vector<Bullet> bullets;
+        std::vector<Robot*> robots;
 
         unsigned int width = 950;
         sf::FloatRect border{0, 0, (float)width, (float)width};
@@ -31,9 +31,10 @@ class Window {
             window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
         }
     public:
-        static void addBullet(sf::Sprite turret, Robot* attacker, float speed, float damage);
-        static void addRobot(Robot*);
+        void addBullet(sf::Sprite turret, Robot* attacker, float speed, float damage);
+        void addRobot(Robot*);
         sf::FloatRect getBorder();
+        std::vector<Robot*> getRobots();
         void moveAllBullets();
         void bulletHit();
         bool isOpen();

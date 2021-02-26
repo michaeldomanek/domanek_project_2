@@ -24,6 +24,8 @@ int main() {
         robo.stopRotateWeapon();
         robo.stopShooting();
 
+        // Robot 1
+
         if (sf::Keyboard::isKeyPressed( sf::Keyboard::A )) {
             robo.rotateLeft();
         } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::D )) {
@@ -46,8 +48,26 @@ int main() {
             robo.startShooting();
         }
 
+        // Robot 2
+
+        robo2.stopMove();
+        robo2.stopRotate();
+
+        if (sf::Keyboard::isKeyPressed( sf::Keyboard::Left )) {
+            robo2.rotateLeft();
+        } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::Right )) {
+            robo2.rotateRight();
+        }
+
+        if (sf::Keyboard::isKeyPressed( sf::Keyboard::Up )) {
+            robo2.moveForward();
+        } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::Down )) {
+            robo2.moveBackward();
+        }
+
         robo.performActions();
-        
+        robo2.performActions();
+
         window.moveAllBullets();
         window.bulletHit();
 

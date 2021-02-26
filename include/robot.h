@@ -94,4 +94,5 @@ class Robot {
         float getTurretRotation();
         const sf::Sprite& getRobotSprite();
         const sf::Sprite& getTurretSprite();
+        const sf::FloatRect getGlobalBounds();
 };

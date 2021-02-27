@@ -36,6 +36,8 @@ class Bullet {
                 sprite.move(25 * 1.5 * movement.x / speed, 25 * 1.5 * movement.y / speed);
             };
         void move();
+
         sf::Sprite getSprite();
         Robot* getAttacker();
+        float getDamage();
 };

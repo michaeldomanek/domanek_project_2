@@ -33,8 +33,11 @@ class Window {
     public:
         void addBullet(sf::Sprite turret, Robot* attacker, float speed, float damage);
         void addRobot(Robot*);
+        void removeRobot(Robot *robot);
+
         sf::FloatRect getBorder();
         std::vector<Robot*> getRobots();
+        
         void moveAllBullets();
         void bulletHit();
         bool isOpen();

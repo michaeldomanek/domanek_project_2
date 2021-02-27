@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,6 +16,15 @@ void Window::addBullet(sf::Sprite turret, Robot* attacker, float speed, float da
 
 void Window::addRobot(Robot *robot) {
     robots.push_back(robot);
+}
+
+void Window::removeRobot(Robot *robot) {
+    robots.erase(remove(robots.begin(), robots.end(), robot), robots.end());
+    if (robots.size() == 1) {
+        window.close();
+        cout << "GAME OVER!" << endl;
+        cout << "Robot: " << robot->getName() << " won!" << endl;
+    }
 }
 
 vector<Robot*> Window::getRobots() {
@@ -55,6 +65,7 @@ void Window::bulletHit() {
 
         for(Robot* robot: robots) {
             if(robot != bullet->getAttacker() && bulletRect.intersects(robot->getRobotSprite().getGlobalBounds())) {
+                robot->substractHealth(bullet->getDamage());
                 bullets.erase(bullet);
             }
         }

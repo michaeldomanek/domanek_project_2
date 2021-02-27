@@ -15,7 +15,9 @@ class Window;
 class Robot {
     private:
         std::string name;
-        float speed;
+        float speed{2.0f};
+        float health{10.0f};
+        bool dead{};
         
         const float robotRotion{1};
         const float turretRotation{1.5f};
@@ -23,7 +25,7 @@ class Robot {
         char moveSign{};
         char rotateSign{};
         char rotateTurretSign{};
-        bool wantToShoot;
+        bool wantToShoot{};
 
         sf::Clock fireCountdown;
         Window& window{Window::getInstance()};
@@ -44,32 +46,30 @@ class Robot {
         void shoot();
     public:
         Robot(std::string name, float posX, float posY):
-        name(name),
-        speed(2.0f)
+        name(name)
         {
-                robotTexture.loadFromFile("../src/resources/body2.png");
-                turretTexture.loadFromFile("../src/resources/turret.png");
+            robotTexture.loadFromFile("../src/resources/body2.png");
+            turretTexture.loadFromFile("../src/resources/turret.png");
 
-                robot.setTexture(robotTexture);
-                turret.setTexture(turretTexture);
-                
-                robot.setOrigin(robot.getLocalBounds().width / 2, robot.getLocalBounds().height / 2);
-                turret.setOrigin(turret.getLocalBounds().width / 2, turret.getLocalBounds().height / 2);
+            robot.setTexture(robotTexture);
+            turret.setTexture(turretTexture);
+            
+            robot.setOrigin(robot.getLocalBounds().width / 2, robot.getLocalBounds().height / 2);
+            turret.setOrigin(turret.getLocalBounds().width / 2, turret.getLocalBounds().height / 2);
 
-                robot.setScale(1.5, 1.5);
-                turret.setScale(1.5, 1.5);
+            robot.setScale(1.5, 1.5);
+            turret.setScale(1.5, 1.5);
 
-                movement = getMoveVector();
-                robotBorder = {robot.getLocalBounds().width, 
-                               robot.getLocalBounds().height, 
-                               border.width - robot.getLocalBounds().width, 
-                               border.height - robot.getLocalBounds().height};
+            movement = getMoveVector();
+            robotBorder = {robot.getLocalBounds().width, 
+                            robot.getLocalBounds().height, 
+                            border.width - robot.getLocalBounds().width, 
+                            border.height - robot.getLocalBounds().height};
 
-                posX = std::min(std::max(robotBorder.left, posX), robotBorder.width);
-                posY = std::min(std::max(robotBorder.top, posY), robotBorder.height);
-                robot.setPosition(posX, posY);
-                turret.setPosition(posX, posY);
-
+            posX = std::min(std::max(robotBorder.left, posX), robotBorder.width);
+            posY = std::min(std::max(robotBorder.top, posY), robotBorder.height);
+            robot.setPosition(posX, posY);
+            turret.setPosition(posX, posY);
         }
         
         void moveForward();
@@ -89,10 +89,14 @@ class Robot {
 
         void performActions();
 
+        void substractHealth(float damage);
+
         sf::Vector2f getPosition();
         float getRotation();
         float getTurretRotation();
         const sf::Sprite& getRobotSprite();
         const sf::Sprite& getTurretSprite();
         const sf::FloatRect getGlobalBounds();
+        bool isDead();
+        std::string getName();
 };

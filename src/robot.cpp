@@ -3,6 +3,7 @@
 #include "robot.h"
 
 #include <SFML/Graphics.hpp>
+#include <string>
 #include <math.h>
 #include <algorithm>
 #include <iostream>
@@ -93,7 +94,7 @@ void Robot::stopRotateWeapon() {
 
 void Robot::shoot() {
     if (wantToShoot && fireCountdown.getElapsedTime().asMilliseconds() > 500) {
-        window.addBullet(turret, this, 5, 10);
+        window.addBullet(turret, this, 5, 2);
         fireCountdown.restart();
     }
 }
@@ -111,6 +112,15 @@ void Robot::performActions() {
     rotate();
     rotateWeapon();
     shoot();
+}
+
+void Robot::substractHealth(float damage) {
+    health -= damage;
+
+    if (health <= 0) {
+        window.removeRobot(this);
+        dead = true;
+    }
 }
 
 sf::Vector2f Robot::getPosition() {
@@ -135,6 +145,14 @@ const sf::Sprite& Robot::getTurretSprite() {
 
 const sf::FloatRect Robot::getGlobalBounds() {
     return robot.getGlobalBounds();
+}
+
+bool Robot::isDead() {
+    return dead;
+}
+
+string Robot::getName() {
+    return name;
 }
 
 sf::Vector2f Robot::getMoveVector() {

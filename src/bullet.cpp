@@ -22,3 +22,7 @@ sf::Sprite Bullet::getSprite() {
 Robot* Bullet::getAttacker() {
     return attacker;
 }
+
+float Bullet::getDamage() {
+    return damage;
+}

@@ -91,6 +91,8 @@ class Robot {
 
         void substractHealth(float damage);
 
+        void setRotation(float rotation);
+
         sf::Vector2f getPosition();
         float getRotation();
         float getTurretRotation();

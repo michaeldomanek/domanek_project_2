@@ -1,9 +1,5 @@
 #pragma once
 
-class Robot;
-class Bullet;
-class Window;
-
 #include "bullet.h"
 #include "robot.h"
 

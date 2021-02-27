@@ -123,6 +123,11 @@ void Robot::substractHealth(float damage) {
     }
 }
 
+void Robot::setRotation(float rotation)  {
+    robot.setRotation(rotation);
+    turret.setRotation(rotation);
+}
+
 sf::Vector2f Robot::getPosition() {
     return robot.getPosition();
 }

@@ -23,7 +23,7 @@ void Window::removeRobot(Robot *robot) {
     if (robots.size() == 1) {
         window.close();
         cout << "GAME OVER!" << endl;
-        cout << "Robot: " << robot->getName() << " won!" << endl;
+        cout << "Robot: " << robots.back()->getName() << " won!" << endl;
     }
 }
 
@@ -56,17 +56,27 @@ void Window::clear() {
 }
 
 void Window::bulletHit() {
-    for (vector<Bullet>::iterator bullet = bullets.begin(); bullets.size() > 0 && bullet != bullets.end(); ++bullet) {            
-        sf::FloatRect bulletRect {bullet->getSprite().getGlobalBounds()};
+    if (bullets.size() > 0) {
+        for (vector<Bullet>::iterator bullet = bullets.begin(); bullets.size() > 0 && bullet != bullets.end();) {
+            bool increamentBullet{};
+            sf::FloatRect bulletRect {bullet->getSprite().getGlobalBounds()};
 
-        if(!bulletRect.intersects(border)){        
-            bullets.erase(bullet);
-        }
-
-        for(Robot* robot: robots) {
-            if(robot != bullet->getAttacker() && bulletRect.intersects(robot->getRobotSprite().getGlobalBounds())) {
-                robot->substractHealth(bullet->getDamage());
+            if(!bulletRect.intersects(border)){        
                 bullets.erase(bullet);
+            } else {
+                increamentBullet = true;
+            }
+
+            for(Robot* robot: robots) {
+                if(robot != bullet->getAttacker() && bulletRect.intersects(robot->getRobotSprite().getGlobalBounds())) {
+                    robot->substractHealth(bullet->getDamage());
+                    bullets.erase(bullet);
+                    increamentBullet = true;
+                }
+            }
+
+            if (increamentBullet) {
+                ++bullet;
             }
         }
     }

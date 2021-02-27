@@ -11,9 +11,9 @@
 using namespace std;
 
 int main() {
-    Robot robo{"robot1", 0, 0};
-    Robot robo2{"robot2", 250, 250};
-    Robot robo3{"robot3", 700, 700};
+    Robot robo{"Keyboard Controll", 0, 0};
+    Robot robo2{"Random Controll", 250, 250};
+    Robot robo3{"Change Direction on Wall hit", 700, 700};
     Window& window{Window::getInstance()};
     window.addRobot(&robo);
     window.addRobot(&robo2);
@@ -23,16 +23,14 @@ int main() {
     mt19937 gen{rd()};
     uniform_real_distribution<> dis{1, 10};
 
+    robo.setRotation(135);
+
     robo2.startShooting();
 
     robo3.rotateWeaponRight();
     robo3.startShooting();
     robo3.moveForward();
-    robo3.rotateLeft();
-    for(int i = 0; i < dis(gen) * 2; i++) {
-        robo3.performActions();
-    }
-    robo3.stopRotate();
+    robo3.setRotation(dis(gen) * 2);
 
     while (window.isOpen()) {
         window.clear();

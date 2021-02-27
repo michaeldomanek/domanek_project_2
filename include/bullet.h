@@ -1,9 +1,5 @@
 #pragma once
 
-class Robot;
-class Bullet;
-class Window;
-
 #include "robot.h"
 
 #include <SFML/Graphics.hpp>

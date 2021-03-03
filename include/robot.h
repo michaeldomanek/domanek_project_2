@@ -16,7 +16,7 @@ class Robot {
     private:
         std::string name;
         float speed{2.0f};
-        float health{10.0f};
+        float health{100.0f};
         bool dead{};
         
         const float robotRotion{1};
@@ -36,9 +36,14 @@ class Robot {
         sf::Texture turretTexture;
         sf::Sprite robot;
         sf::Sprite turret;
-        
+
+        sf::Font font;
+        sf::Text nameText;
+        sf::Text healthText;
+
         sf::Vector2f movement;
         sf::Vector2f getMoveVector();
+        void initialiseText(sf::Text&, std::string);
 
         void move();
         void rotate();
@@ -48,9 +53,9 @@ class Robot {
         Robot(std::string name, float posX, float posY):
         name(name)
         {
-            robotTexture.loadFromFile("../src/resources/body2.png");
+            robotTexture.loadFromFile("../src/resources/body-grey.png");
             turretTexture.loadFromFile("../src/resources/turret.png");
-
+            
             robot.setTexture(robotTexture);
             turret.setTexture(turretTexture);
             
@@ -70,6 +75,14 @@ class Robot {
             posY = std::min(std::max(robotBorder.top, posY), robotBorder.height);
             robot.setPosition(posX, posY);
             turret.setPosition(posX, posY);
+
+            font.loadFromFile("../src/resources/ARIAL.TTF");
+            initialiseText(nameText, name);
+            initialiseText(healthText, std::to_string(health).substr(0, std::to_string(health).find(".") + 2)); //ToDo: std::string s = fmt::format("{:.2f}", 3.14159265359); // s == "3.14"
+            nameText.setPosition(posX, posY + robot.getLocalBounds().width * 1.5);
+            healthText.setPosition(posX, posY - robot.getLocalBounds().width * 1.5);
+
+            // turret.setColor(sf::Color::Red);
         }
         
         void moveForward();
@@ -101,4 +114,7 @@ class Robot {
         const sf::FloatRect getGlobalBounds();
         bool isDead();
         std::string getName();
+        sf::Text getNameText();
+        sf::Text getHealthText();
+
 };

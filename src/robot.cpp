@@ -14,6 +14,8 @@ void Robot::move() {
     if (moveSign) {
         robot.move(movement.x * moveSign, movement.y * moveSign);
         turret.move(movement.x * moveSign, movement.y * moveSign);
+        nameText.move(movement.x * moveSign, movement.y * moveSign);
+        healthText.move(movement.x * moveSign, movement.y * moveSign);
 
         sf::FloatRect robotBounds{robot.getGlobalBounds()};
 
@@ -21,6 +23,8 @@ void Robot::move() {
             if (this != robo && robotBounds.intersects(robo->getGlobalBounds())) {
                 robot.move(movement.x * -moveSign, movement.y * -moveSign);
                 turret.move(movement.x * -moveSign, movement.y * -moveSign);
+                nameText.move(movement.x * -moveSign, movement.y * -moveSign);
+                healthText.move(movement.x * -moveSign, movement.y * -moveSign);
             }
         }
 
@@ -29,6 +33,8 @@ void Robot::move() {
             float posY{min(max(robotBorder.top, robot.getPosition().y), robotBorder.height)};
             robot.setPosition(posX, posY);
             turret.setPosition(posX, posY);
+            nameText.setPosition(posX, posY + robot.getLocalBounds().width * 1.5);
+            healthText.setPosition(posX, posY - robot.getLocalBounds().width * 1.5);
         }
     }
 }
@@ -94,7 +100,7 @@ void Robot::stopRotateWeapon() {
 
 void Robot::shoot() {
     if (wantToShoot && fireCountdown.getElapsedTime().asMilliseconds() > 500) {
-        window.addBullet(turret, this, 5, 2);
+        window.addBullet(turret, this);
         fireCountdown.restart();
     }
 }
@@ -116,6 +122,7 @@ void Robot::performActions() {
 
 void Robot::substractHealth(float damage) {
     health -= damage;
+    healthText.setString(to_string(health).substr(0, to_string(health).find(".") + 2));
 
     if (health <= 0) {
         window.removeRobot(this);
@@ -160,7 +167,26 @@ string Robot::getName() {
     return name;
 }
 
+sf::Text Robot::getNameText() {
+    return nameText;
+}
+
+sf::Text Robot::getHealthText() {
+    return healthText;
+}
+
 sf::Vector2f Robot::getMoveVector() {
     float angle = robot.getRotation() * M_PI / 180;
     return sf::Vector2f{sin(angle) * speed, cos(angle) * -speed};
+}
+
+void Robot::initialiseText(sf::Text& text, string input) {
+    text.setFont(font);
+    text.setString(input);
+    text.setCharacterSize(14);
+    text.setFillColor(sf::Color::White);
+
+    sf::FloatRect textRect = text.getLocalBounds();
+    text.setOrigin(textRect.left + textRect.width/2.0f,
+                        textRect.top  + textRect.height/2.0f);   
 }

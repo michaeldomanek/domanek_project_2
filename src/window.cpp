@@ -9,8 +9,8 @@
 
 using namespace std;
 
-void Window::addBullet(sf::Sprite turret, Robot* attacker, float speed, float damage) {
-    Bullet bullet{turret, attacker, speed, damage};
+void Window::addBullet(sf::Sprite turret, Robot* attacker) {
+    Bullet bullet{turret, attacker, bulletSpeed, bulletDamage};
     bullets.push_back(bullet);
 }
 
@@ -19,7 +19,12 @@ void Window::addRobot(Robot *robot) {
 }
 
 void Window::removeRobot(Robot *robot) {
+    sf::Sprite deadRobot{robot->getRobotSprite()};
+    deadRobot.setTexture(explosionTexture);
+
     robots.erase(remove(robots.begin(), robots.end(), robot), robots.end());
+    deadBodies.push_back(deadRobot);
+
     if (robots.size() == 1) {
         window.close();
         cout << "GAME OVER!" << endl;
@@ -52,7 +57,7 @@ bool Window::isOpen() {
 }
 
 void Window::clear() {
-    window.clear(sf::Color::Black);
+    window.clear(sf::Color{133, 125, 122}); //grey
 }
 
 void Window::bulletHit() {
@@ -90,14 +95,23 @@ void Window::handleEvent() {
     }
 }
 
+void Window::showAllDeadBodies() {
+    for(sf::Sprite deadBody: deadBodies) {
+        window.draw(deadBody);
+    }
+}
+
 void Window::showRobots() {
     for(Robot* robot: robots) {
         window.draw(robot->getRobotSprite());
         window.draw(robot->getTurretSprite());
+        window.draw(robot->getNameText());
+        window.draw(robot->getHealthText());
     }
 }
 
 void Window::draw() {
+    showAllDeadBodies();
     showAllBullets();
     showRobots();
 }

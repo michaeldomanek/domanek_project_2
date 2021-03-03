@@ -10,11 +10,19 @@ class Window {
     private:
         std::vector<Bullet> bullets;
         std::vector<Robot*> robots;
+        std::vector<sf::Sprite> deadBodies;
+
+        float bulletSpeed{5};
+        float bulletDamage{19};
 
         unsigned int width = 950;
         sf::FloatRect border{0, 0, (float)width, (float)width};
         sf::RenderWindow window{sf::VideoMode(width, width), "Robotgame"};
 
+        sf::Texture explosionTexture;
+        sf::Sprite explosion;
+
+        void showAllDeadBodies();
         void showAllBullets();
         void showRobots();
     
@@ -25,9 +33,11 @@ class Window {
             sf::Image icon;
             icon.loadFromFile("../src/resources/icon.png");
             window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
+            explosionTexture.loadFromFile("../src/resources/explosion.png");
         }
     public:
-        void addBullet(sf::Sprite turret, Robot* attacker, float speed, float damage);
+        void addBullet(sf::Sprite turret, Robot* attacker);
         void addRobot(Robot*);
         void removeRobot(Robot *robot);
 

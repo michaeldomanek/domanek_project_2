@@ -1,13 +1,31 @@
 * Changelog
 ** [Unreleased]
 *** Added
-- xxx
+- Added name of robot above robot (Text)
+- Added health of robot below robot (Text)
+- Added deathpoint of robot
+- Added arial font
 *** Changed
-- xxx
+- Changed body of robot to grey so client can choose color
 *** Removed
 - xxx
 
-** [0.0.3] - 2020-02-22
+** [0.0.4] - 2021-03-01
+*** Added
+- Added border for robot so that it does not drive outside the window
+- Added collision between robots so that they can not collide
+- Added robot with random movement
+- Added robot that changes direction on wall hit
+- Added health for robot
+- Robots can die and a robot can win a game
+- Adde
+*** Changed
+- Changed Window class to singelton
+- Fixed error when bullet gets erased
+*** Removed
+- Removed second keyboard controlled robot
+
+** [0.0.3] - 2021-02-22
 *** Added
 - Added robowiki resources
 - Added keyboard controll for example application
@@ -21,7 +39,7 @@
 - removed unnecessary template files
 
 
-** [0.0.2] - 2020-02-15
+** [0.0.2] - 2021-02-15
 *** Added
 - Added smfl libary
 - Added smfl example in main
@@ -33,7 +51,7 @@
 - Tested tabulate but removed it
 
 
-** [0.0.1] - 2020-02-08
+** [0.0.1] - 2021-02-08
 *** Added
 - Create repository and send invitation to prof
 - Fill .gitignore

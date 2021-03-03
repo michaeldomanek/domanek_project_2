@@ -13,7 +13,8 @@ using namespace std;
 int main() {
     Robot robo{"Keyboard Controll", 0, 0};
     Robot robo2{"Random Controll", 250, 250};
-    Robot robo3{"Change Direction on Wall hit", 700, 700};
+    Robot robo3{"Change direction on wall hit", 700, 700};
+
     Window& window{Window::getInstance()};
     window.addRobot(&robo);
     window.addRobot(&robo2);
@@ -31,6 +32,7 @@ int main() {
     robo3.startShooting();
     robo3.moveForward();
     robo3.setRotation(dis(gen) * 2);
+    
 
     while (window.isOpen()) {
         window.clear();

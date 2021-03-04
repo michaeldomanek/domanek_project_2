@@ -1,5 +1,4 @@
 option('asio_include_dir', type : 'string', value : '/home/michael/asio/asio/include/', description : 'the include dir of asio')
 option('cli11_include_dir', type : 'string', value : '/home/michael/', description : 'the dir containing CLI11.hpp')
 option('criterion_include_dir', type : 'string', value : '', description : 'the dir containing criterion.hpp')
-option('fmt_include_dir', type : 'string', value : '', description : 'the include dir of fmt')
 option('spdlog_include_dir', type : 'string', value : '/home/michael/spdlog/include/', description : 'the include dir of spdlog')

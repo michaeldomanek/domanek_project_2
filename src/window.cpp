@@ -3,6 +3,9 @@
 #include "robot.h"
 
 #include <SFML/Graphics.hpp>
+#include "spdlog/fmt/fmt.h"
+#include "spdlog/fmt/bundled/color.h"
+
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -27,8 +30,10 @@ void Window::removeRobot(Robot *robot) {
 
     if (robots.size() == 1) {
         window.close();
-        cout << "GAME OVER!" << endl;
-        cout << "Robot: " << robots.back()->getName() << " won!" << endl;
+        fmt::print("GAME OVER!\n");
+        fmt::print("Robot: ");
+        fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, robots.back()->getName());
+        fmt::print(" won!\n");
     }
 }
 

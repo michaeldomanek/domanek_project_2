@@ -15,8 +15,8 @@ project('RobotGame', 'cpp',
 # # CLI11: https://github.com/CLIUtils/CLI11
 # add_global_arguments('-I' + get_option('cli11_include_dir'), language : 'cpp')
 
-# # spdlog: https://github.com/gabime/spdlog
-# add_global_arguments('-I' + get_option('spdlog_include_dir'), language : 'cpp')
+# spdlog: https://github.com/gabime/spdlog
+add_global_arguments('-I' + get_option('spdlog_include_dir'), language : 'cpp')
 
 # # begin protobuf: https://developers.google.com/protocol-buffers/
 # # protobuf: must be installed independently and has to be found...

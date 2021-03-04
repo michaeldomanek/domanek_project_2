@@ -2,15 +2,17 @@
 
 class Robot;
 class Bullet;
-class Window;
 
 #include "bullet.h"
 #include "window.h"
 
 #include <SFML/Graphics.hpp>
+#include "spdlog/fmt/fmt.h"
+
 #include <string>
 #include <algorithm>
 #include <iostream>
+
 
 class Robot {
     private:
@@ -78,7 +80,7 @@ class Robot {
 
             font.loadFromFile("../src/resources/ARIAL.TTF");
             initialiseText(nameText, name);
-            initialiseText(healthText, std::to_string(health).substr(0, std::to_string(health).find(".") + 2)); //ToDo: std::string s = fmt::format("{:.2f}", 3.14159265359); // s == "3.14"
+            initialiseText(healthText, fmt::format("{:.1f}", health)); 
             nameText.setPosition(posX, posY + robot.getLocalBounds().width * 1.5);
             healthText.setPosition(posX, posY - robot.getLocalBounds().width * 1.5);
 

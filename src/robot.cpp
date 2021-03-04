@@ -3,6 +3,8 @@
 #include "robot.h"
 
 #include <SFML/Graphics.hpp>
+#include "spdlog/fmt/fmt.h"
+
 #include <string>
 #include <math.h>
 #include <algorithm>
@@ -122,7 +124,7 @@ void Robot::performActions() {
 
 void Robot::substractHealth(float damage) {
     health -= damage;
-    healthText.setString(to_string(health).substr(0, to_string(health).find(".") + 2));
+    healthText.setString(fmt::format("{:.1f}", health));
 
     if (health <= 0) {
         window.removeRobot(this);
@@ -187,6 +189,6 @@ void Robot::initialiseText(sf::Text& text, string input) {
     text.setFillColor(sf::Color::White);
 
     sf::FloatRect textRect = text.getLocalBounds();
-    text.setOrigin(textRect.left + textRect.width/2.0f,
-                        textRect.top  + textRect.height/2.0f);   
+    text.setOrigin(textRect.left + textRect.width / 2.0f,
+                        textRect.top  + textRect.height / 2.0f);   
 }

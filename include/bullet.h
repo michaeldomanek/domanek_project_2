@@ -28,6 +28,7 @@ class Bullet {
                 sprite.setOrigin(1, 1);
                 sprite.setScale(1.5, 1.5);
 
+                //move to firepoint
                 movement = getMoveVector(speed);
                 sprite.move(25 * 1.5 * movement.x / speed, 25 * 1.5 * movement.y / speed);
             };

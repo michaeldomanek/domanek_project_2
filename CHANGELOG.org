@@ -5,10 +5,13 @@
 - Added health of robot below robot (Text)
 - Added deathpoint of robot
 - Added arial font
+- Added RobotProperties to store individual properties about the robot
+- Added RobotConfiguration to store global configuration about all robots
 *** Changed
+- Changed all config values so that they must be passed to the constructor
 - Changed body of robot to grey so client can choose color
 *** Removed
-- xxx
+- Removed all unnecessary values from the robot class and moved them in the config/properties class
 
 ** [0.0.4] - 2021-03-01
 *** Added

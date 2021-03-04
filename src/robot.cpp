@@ -54,14 +54,15 @@ void Robot::stopMove() {
 }
 
 void Robot::rotate() {
-    robot.setRotation(robot.getRotation() + (robotRotion * rotateSign));
-    turret.setRotation(turret.getRotation() + (robotRotion * rotateSign));
+    const float robotRotation{config.getRobotRotation()};
+    robot.setRotation(robot.getRotation() + (robotRotation * rotateSign));
+    turret.setRotation(turret.getRotation() + (robotRotation * rotateSign));
 
     if (rotateSign) {
         for(Robot* robo: window.getRobots()) {
             if (this != robo && robot.getGlobalBounds().intersects(robo->getGlobalBounds())) {
-                robot.setRotation(robot.getRotation() + (robotRotion * -rotateSign));
-                turret.setRotation(turret.getRotation() + (robotRotion * -rotateSign));
+                robot.setRotation(robot.getRotation() + (robotRotation * -rotateSign));
+                turret.setRotation(turret.getRotation() + (robotRotation * -rotateSign));
                 break;
             }
         }
@@ -84,7 +85,7 @@ void Robot::stopRotate() {
 
 void Robot::rotateWeapon() {
     if (rotateTurretSign) {
-        turret.setRotation(turret.getRotation() + (turretRotation * rotateTurretSign));
+        turret.setRotation(turret.getRotation() + (config.getTurretRotation() * rotateTurretSign));
     }
 }
 
@@ -166,7 +167,7 @@ bool Robot::isDead() {
 }
 
 string Robot::getName() {
-    return name;
+    return properties.getName();
 }
 
 sf::Text Robot::getNameText() {
@@ -178,7 +179,8 @@ sf::Text Robot::getHealthText() {
 }
 
 sf::Vector2f Robot::getMoveVector() {
-    float angle = robot.getRotation() * M_PI / 180;
+    const float angle{robot.getRotation() * (float)M_PI / 180.0f};
+    const float speed{config.getSpeed()};
     return sf::Vector2f{sin(angle) * speed, cos(angle) * -speed};
 }
 
@@ -190,5 +192,8 @@ void Robot::initialiseText(sf::Text& text, string input) {
 
     sf::FloatRect textRect = text.getLocalBounds();
     text.setOrigin(textRect.left + textRect.width / 2.0f,
-                        textRect.top  + textRect.height / 2.0f);   
+                   textRect.top  + textRect.height / 2.0f);
+    sf::Vector2f pos{robot.getPosition()};
+    pos.y = pos.y + robot.getLocalBounds().width * 1.5;
+    text.setPosition(pos);
 }

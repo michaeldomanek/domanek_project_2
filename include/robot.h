@@ -5,24 +5,20 @@ class Bullet;
 
 #include "bullet.h"
 #include "window.h"
+#include "robotConfiguration.h"
+#include "robotProperties.h"
 
 #include <SFML/Graphics.hpp>
 #include "spdlog/fmt/fmt.h"
-
-#include <string>
 #include <algorithm>
-#include <iostream>
-
 
 class Robot {
     private:
-        std::string name;
-        float speed{2.0f};
-        float health{100.0f};
         bool dead{};
-        
-        const float robotRotion{1};
-        const float turretRotation{1.5f};
+        float health;
+
+        RobotProperties properties;
+        RobotConfiguration config;
 
         char moveSign{};
         char rotateSign{};
@@ -51,9 +47,12 @@ class Robot {
         void rotate();
         void rotateWeapon();
         void shoot();
+
     public:
-        Robot(std::string name, float posX, float posY):
-        name(name)
+        Robot(RobotProperties properties, RobotConfiguration config):
+        health(config.getHealth()),
+        properties(properties),
+        config(config)
         {
             robotTexture.loadFromFile("../src/resources/body-grey.png");
             turretTexture.loadFromFile("../src/resources/turret.png");
@@ -72,19 +71,18 @@ class Robot {
                             robot.getLocalBounds().height, 
                             border.width - robot.getLocalBounds().width, 
                             border.height - robot.getLocalBounds().height};
-
-            posX = std::min(std::max(robotBorder.left, posX), robotBorder.width);
-            posY = std::min(std::max(robotBorder.top, posY), robotBorder.height);
-            robot.setPosition(posX, posY);
-            turret.setPosition(posX, posY);
+            
+            sf::Vector2f pos = properties.getPosition();
+            pos.x = std::min(std::max(robotBorder.left, pos.x), robotBorder.width);
+            pos.y = std::min(std::max(robotBorder.top, pos.y), robotBorder.height);
+            robot.setPosition(pos);
+            turret.setPosition(pos);
 
             font.loadFromFile("../src/resources/ARIAL.TTF");
-            initialiseText(nameText, name);
-            initialiseText(healthText, fmt::format("{:.1f}", health)); 
-            nameText.setPosition(posX, posY + robot.getLocalBounds().width * 1.5);
-            healthText.setPosition(posX, posY - robot.getLocalBounds().width * 1.5);
+            initialiseText(nameText, properties.getName());
+            initialiseText(healthText, fmt::format("{:.1f}", health));
 
-            // turret.setColor(sf::Color::Red);
+            turret.setColor(properties.getColor());
         }
         
         void moveForward();
@@ -118,5 +116,4 @@ class Robot {
         std::string getName();
         sf::Text getNameText();
         sf::Text getHealthText();
-
 };

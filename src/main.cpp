@@ -1,6 +1,8 @@
 #include "bullet.h"
 #include "window.h"
 #include "robot.h"
+#include "robotConfiguration.h"
+#include "robotProperties.h"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -11,11 +13,17 @@
 using namespace std;
 
 int main() {
-    Robot robo{"Keyboard Controll", 0, 0};
-    Robot robo2{"Random Controll", 250, 250};
-    Robot robo3{"Change direction on wall hit", 700, 700};
+    Window& window{Window::getInstance(950, 5, 19)};
 
-    Window& window{Window::getInstance()};
+    RobotConfiguration config{2.0f, 100.0f, 1.0f, 1.5f};
+    RobotProperties properties{"Keyboard Controll", sf::Color::Blue, sf::Vector2f{0, 0}};
+    RobotProperties properties2{"Random Controll", sf::Color::Red, sf::Vector2f{250, 250}};
+    RobotProperties properties3{"Change direction on wall hit", sf::Color::Green, sf::Vector2f{700, 700}};
+
+    Robot robo{properties, config};
+    Robot robo2{properties2, config};
+    Robot robo3{properties3, config};
+    
     window.addRobot(&robo);
     window.addRobot(&robo2);
     window.addRobot(&robo3);

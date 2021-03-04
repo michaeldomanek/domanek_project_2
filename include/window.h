@@ -13,12 +13,11 @@ class Window {
         std::vector<Robot*> robots;
         std::vector<sf::Sprite> deadBodies;
 
-        float bulletSpeed{5};
-        float bulletDamage{19};
+        float bulletSpeed;
+        float bulletDamage;
 
-        unsigned int width = 950;
-        sf::FloatRect border{0, 0, (float)width, (float)width};
-        sf::RenderWindow window{sf::VideoMode(width, width), "Robotgame"};
+        sf::FloatRect border;
+        sf::RenderWindow window;
 
         sf::Texture explosionTexture;
         sf::Sprite explosion;
@@ -26,17 +25,22 @@ class Window {
         void showAllDeadBodies();
         void showAllBullets();
         void showRobots();
-    
-        Window()
-        {
-            window.setFramerateLimit(120);
 
-            sf::Image icon;
-            icon.loadFromFile("../src/resources/icon.png");
-            window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+        Window(const unsigned int& width, const float& bulletSpeed, const float& bulletDamage):
+            bulletSpeed(bulletSpeed),
+            bulletDamage(bulletDamage),
+            border(0, 0, (float)width, (float)width),
+            window(sf::VideoMode(width, width), "Robotgame")
+            {
+                window.setFramerateLimit(120);
 
-            explosionTexture.loadFromFile("../src/resources/explosion.png");
-        }
+                sf::Image icon;
+                icon.loadFromFile("../src/resources/icon.png");
+                window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
+                explosionTexture.loadFromFile("../src/resources/explosion.png");
+            }
+
     public:
         void addBullet(sf::Sprite turret, Robot* attacker);
         void addRobot(Robot*);
@@ -53,9 +57,9 @@ class Window {
         void draw();
         void display();
 
-        static Window& getInstance()
+        static Window& getInstance(const unsigned int& width=0, const float& bulletSpeed=0, const float& bulletDamage=0)
         {
-            static Window instance;
+            static Window instance(width, bulletSpeed, bulletDamage);
             return instance;
         }
 

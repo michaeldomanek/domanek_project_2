@@ -1,7 +1,7 @@
 # uncomment as necessary
 project('RobotGame', 'cpp',
         license : ['Boost'],
-        version : '0.0.3',
+        version : '0.0.4',
         default_options : ['cpp_std=c++17', 'warning_level=3', 'werror=true'])
 
 # thread_dep = dependency('threads')
@@ -12,8 +12,8 @@ project('RobotGame', 'cpp',
 # add_global_arguments('-DASIO_NO_DEPRECATED', language : 'cpp')
 # # end asio
 
-# # CLI11: https://github.com/CLIUtils/CLI11
-# add_global_arguments('-I' + get_option('cli11_include_dir'), language : 'cpp')
+# CLI11: https://github.com/CLIUtils/CLI11
+add_global_arguments('-I' + get_option('cli11_include_dir'), language : 'cpp')
 
 # spdlog: https://github.com/gabime/spdlog
 add_global_arguments('-I' + get_option('spdlog_include_dir'), language : 'cpp')

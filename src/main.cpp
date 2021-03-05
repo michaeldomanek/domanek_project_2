@@ -3,6 +3,7 @@
 #include "robot.h"
 #include "robotConfiguration.h"
 #include "robotProperties.h"
+#include "CLI11.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -12,10 +13,37 @@
 
 using namespace std;
 
-int main() {
-    Window& window{Window::getInstance(950, 5, 19)};
+int main(int argc, char* argv[]) {
+    CLI::App app("Robotgame");
 
-    RobotConfiguration config{2.0f, 100.0f, 1.0f, 1.5f};
+    unsigned int width{950};
+    app.add_option("-w,--width", width, "width and height of the window");
+
+    float bulletSpeed{5};
+    app.add_option("--bullet-speed", bulletSpeed, "the speed of the bullets");
+
+    float bulletDamage{19};
+    app.add_option("--bullet-damage", bulletDamage, "the damage of the bullets");
+
+    float robotSpeed{2};
+    app.add_option("--robot-speed", robotSpeed, "the speed of the robots");
+
+    float health{100};
+    app.add_option("--health", health, "the health of the robots");
+
+    float robotRotation{1};
+    app.add_option("--robot-rotation", robotRotation, "the robot roation speed of the robots");
+
+    float turretRotation{1.5};
+    app.add_option("--turret-rotation", turretRotation, "the turret roation speed of the robots");
+
+    CLI11_PARSE(app, argc, argv);
+
+    Window& window{Window::getInstance(width, bulletSpeed, bulletDamage)};
+
+    RobotConfiguration config{robotSpeed, health, robotRotation, turretRotation};
+
+    // This properties will be spezified by the client
     RobotProperties properties{"Keyboard Controll", sf::Color::Blue, sf::Vector2f{0, 0}};
     RobotProperties properties2{"Random Controll", sf::Color::Red, sf::Vector2f{250, 250}};
     RobotProperties properties3{"Change direction on wall hit", sf::Color::Green, sf::Vector2f{700, 700}};
@@ -23,7 +51,7 @@ int main() {
     Robot robo{properties, config};
     Robot robo2{properties2, config};
     Robot robo3{properties3, config};
-    
+
     window.addRobot(&robo);
     window.addRobot(&robo2);
     window.addRobot(&robo3);
@@ -40,7 +68,6 @@ int main() {
     robo3.startShooting();
     robo3.moveForward();
     robo3.setRotation(dis(gen) * 2);
-    
 
     while (window.isOpen()) {
         window.clear();
@@ -48,7 +75,6 @@ int main() {
         // Robot 1
 
         if (!robo.isDead()) {
-
             robo.stopMove();
             robo.stopRotate();
             robo.stopRotateWeapon();

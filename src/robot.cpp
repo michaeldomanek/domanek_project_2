@@ -193,7 +193,4 @@ void Robot::initialiseText(sf::Text& text, string input) {
     sf::FloatRect textRect = text.getLocalBounds();
     text.setOrigin(textRect.left + textRect.width / 2.0f,
                    textRect.top  + textRect.height / 2.0f);
-    sf::Vector2f pos{robot.getPosition()};
-    pos.y = pos.y + robot.getLocalBounds().width * 1.5;
-    text.setPosition(pos);
 }

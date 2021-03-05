@@ -82,6 +82,9 @@ class Robot {
             initialiseText(nameText, properties.getName());
             initialiseText(healthText, fmt::format("{:.1f}", health));
 
+            nameText.setPosition(pos.x, pos.y + robot.getLocalBounds().width * 1.5);
+            healthText.setPosition(pos.x, pos.y - robot.getLocalBounds().width * 1.5);
+
             turret.setColor(properties.getColor());
         }
         

@@ -2,10 +2,10 @@
 
 class RobotConfiguration {
     private:
-        const float speed{2.0f};
-        const float health{100.0f};
-        const float robotRotation{1};
-        const float turretRotation{1.5f};
+        const float speed;
+        const float health;
+        const float robotRotation;
+        const float turretRotation;
 
     public:
         RobotConfiguration(float speed, float health, float robotRotation, float turretRotation):

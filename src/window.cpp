@@ -13,7 +13,7 @@
 using namespace std;
 
 void Window::addBullet(sf::Sprite turret, Robot* attacker) {
-    Bullet bullet{turret, attacker, bulletSpeed, bulletDamage};
+    Bullet bullet{turret, attacker, config};
     bullets.push_back(bullet);
 }
 

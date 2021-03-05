@@ -2,6 +2,7 @@
 
 #include "bullet.h"
 #include "robot.h"
+#include "bulletConfiguration.h"
 
 #include <SFML/Graphics.hpp>
 #include <vector>
@@ -13,8 +14,7 @@ class Window {
         std::vector<Robot*> robots;
         std::vector<sf::Sprite> deadBodies;
 
-        float bulletSpeed;
-        float bulletDamage;
+        BulletConfiguration config;
 
         sf::FloatRect border;
         sf::RenderWindow window;
@@ -26,9 +26,8 @@ class Window {
         void showAllBullets();
         void showRobots();
 
-        Window(const unsigned int& width, const float& bulletSpeed, const float& bulletDamage):
-            bulletSpeed(bulletSpeed),
-            bulletDamage(bulletDamage),
+        Window(const unsigned int& width, const BulletConfiguration& config):
+            config(config),
             border(0, 0, (float)width, (float)width),
             window(sf::VideoMode(width, width), "Robotgame")
             {
@@ -57,9 +56,8 @@ class Window {
         void draw();
         void display();
 
-        static Window& getInstance(const unsigned int& width=0, const float& bulletSpeed=0, const float& bulletDamage=0)
-        {
-            static Window instance(width, bulletSpeed, bulletDamage);
+        static Window& getInstance(const unsigned int& width=0, const BulletConfiguration& config={0, 0, 0}) {
+            static Window instance(width, config);
             return instance;
         }
 

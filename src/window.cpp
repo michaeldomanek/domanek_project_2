@@ -124,3 +124,8 @@ void Window::draw() {
 void Window::display() {
     window.display();
 }
+
+sf::Vector2f Window::getAvailablePosition() {
+    static short current{0};
+    return startPositions[current++];
+}

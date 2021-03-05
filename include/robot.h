@@ -26,8 +26,7 @@ class Robot {
         bool wantToShoot{};
 
         sf::Clock fireCountdown;
-        Window& window{Window::getInstance()};
-        sf::FloatRect border{window.getBorder()};
+        Window& window;
         sf::FloatRect robotBorder;
 
         sf::Texture robotTexture;
@@ -47,14 +46,14 @@ class Robot {
         void rotate();
         void rotateWeapon();
         void shoot();
-
     public:
         Robot(RobotProperties properties, RobotConfiguration config):
         health(config.getHealth()),
         properties(properties),
-        config(config)
+        config(config),
+        window(Window::getInstance())
         {
-            robotTexture.loadFromFile("../src/resources/body-grey.png");
+            robotTexture.loadFromFile("../src/resources/body-border.png");
             turretTexture.loadFromFile("../src/resources/turret.png");
             
             robot.setTexture(robotTexture);
@@ -67,14 +66,14 @@ class Robot {
             turret.setScale(1.5, 1.5);
 
             movement = getMoveVector();
+
+            sf::FloatRect border{window.getBorder()};
             robotBorder = {robot.getLocalBounds().width, 
                             robot.getLocalBounds().height, 
                             border.width - robot.getLocalBounds().width, 
                             border.height - robot.getLocalBounds().height};
             
-            sf::Vector2f pos = properties.getPosition();
-            pos.x = std::min(std::max(robotBorder.left, pos.x), robotBorder.width);
-            pos.y = std::min(std::max(robotBorder.top, pos.y), robotBorder.height);
+            sf::Vector2f pos = window.getAvailablePosition();
             robot.setPosition(pos);
             turret.setPosition(pos);
 

@@ -6,6 +6,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <random>
+#include <algorithm>
 #include <iostream>
 
 class Window {
@@ -19,6 +21,8 @@ class Window {
         sf::FloatRect border;
         sf::RenderWindow window;
 
+        sf::Vector2f startPositions[4];
+
         sf::Texture explosionTexture;
         sf::Sprite explosion;
 
@@ -29,7 +33,8 @@ class Window {
         Window(const unsigned int& width, const BulletConfiguration& config):
             config(config),
             border(0, 0, (float)width, (float)width),
-            window(sf::VideoMode(width, width), "Robotgame")
+            window(sf::VideoMode(width, width), "Robotgame"),
+            startPositions({{40, 40}, {40, width - 40.0f}, {width - 40.0f, 40}, {width - 40.0f, width - 40.0f}})
             {
                 window.setFramerateLimit(120);
 
@@ -38,6 +43,9 @@ class Window {
                 window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
                 explosionTexture.loadFromFile("../src/resources/explosion.png");
+
+                srand(unsigned(time(NULL)));
+                std::random_shuffle(std::begin(startPositions), std::end(startPositions));
             }
 
     public:
@@ -55,6 +63,8 @@ class Window {
         void handleEvent();
         void draw();
         void display();
+
+        sf::Vector2f getAvailablePosition();
 
         static Window& getInstance(const unsigned int& width=0, const BulletConfiguration& config={0, 0, 0}) {
             static Window instance(width, config);

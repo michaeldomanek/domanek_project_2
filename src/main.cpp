@@ -47,9 +47,9 @@ int main(int argc, char* argv[]) {
     BulletConfiguration bulletConfig{bulletSpeed, bulletDamage, bulletSize};
 
     // This properties will be spezified by the client
-    RobotProperties properties{"Keyboard Controll", sf::Color::Blue, sf::Vector2f{0, 0}};
-    RobotProperties properties2{"Random Controll", sf::Color::Red, sf::Vector2f{250, 250}};
-    RobotProperties properties3{"Change direction on wall hit", sf::Color::Green, sf::Vector2f{700, 700}};
+    RobotProperties properties{"Keyboard Controll", sf::Color::Blue};
+    RobotProperties properties2{"Random Controll", sf::Color::Red};
+    RobotProperties properties3{"Change direction on wall hit", sf::Color::Green};
 
     Window& window{Window::getInstance(width, bulletConfig)};
 

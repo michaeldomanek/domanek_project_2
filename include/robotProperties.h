@@ -8,13 +8,11 @@ class RobotProperties {
     private:
         const std::string name;
         const sf::Color color;
-        const sf::Vector2f position;
 
     public:
-        RobotProperties(std::string name, sf::Color color, sf::Vector2f position):
+        RobotProperties(std::string name, sf::Color color):
         name(name),
-        color(color),
-        position(position)
+        color(color)
         {}
 
         std::string getName() {
@@ -23,9 +21,5 @@ class RobotProperties {
 
         sf::Color getColor() {
             return color;
-        }
-
-        sf::Vector2f getPosition() {
-            return position;
         }
 };

@@ -49,10 +49,10 @@ class Robot {
         void shoot();
     public:
         Robot(RobotProperties properties, RobotConfiguration config):
-        health(config.getHealth()),
-        properties(properties),
-        config(config),
-        window(Window::getInstance())
+            health(config.getHealth()),
+            properties(properties),
+            config(config),
+            window(Window::getInstance())
         {
             robotTexture.loadFromFile("../src/resources/body-border.png");
             turretTexture.loadFromFile("../src/resources/turret.png");

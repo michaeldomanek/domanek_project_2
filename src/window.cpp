@@ -20,6 +20,9 @@ void Window::addBullet(sf::Sprite turret, Robot* attacker) {
 
 void Window::addRobot(Robot *robot) {
     robots.push_back(robot);
+    fmt::print("Robot: ");
+    fmt::print(fg(fmt::color::cyan) | fmt::emphasis::bold, robot->getName());
+    fmt::print(" started playing! [{} / 4] player\n", robots.size());
 }
 
 void Window::removeRobot(Robot *robot) {
@@ -53,7 +56,7 @@ void Window::moveAllBullets() {
 }
 
 void Window::showAllBullets() {
-    for(Bullet &bullet: bullets) {
+    for(Bullet& bullet: bullets) {
         window.draw(bullet.getSprite());
     }
 }
@@ -69,25 +72,24 @@ void Window::clear() {
 void Window::bulletHit() {
     if (bullets.size() > 0) {
         for (vector<Bullet>::iterator bullet = bullets.begin(); bullets.size() > 0 && bullet != bullets.end();) {
-            bool increamentBullet{};
+            bool increamentBullet{true};
             sf::FloatRect bulletRect {bullet->getSprite().getGlobalBounds()};
 
             if(!bulletRect.intersects(border)){        
                 bullets.erase(bullet);
             } else {
-                increamentBullet = true;
-            }
-
-            for(Robot* robot: robots) {
-                if(robot != bullet->getAttacker() && bulletRect.intersects(robot->getRobotSprite().getGlobalBounds())) {
-                    robot->substractHealth(bullet->getDamage());
-                    bullets.erase(bullet);
-                    increamentBullet = true;
+                for(Robot* robot: robots) {
+                    if(robot != bullet->getAttacker() && bulletRect.intersects(robot->getRobotSprite().getGlobalBounds())) {
+                        robot->substractHealth(bullet->getDamage());
+                        bullets.erase(bullet);
+                        increamentBullet = false;
+                        break;
+                    }
                 }
-            }
 
-            if (increamentBullet) {
-                ++bullet;
+                if (increamentBullet) {
+                    ++bullet;
+                }
             }
         }
     }

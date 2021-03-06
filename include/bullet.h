@@ -18,23 +18,24 @@ class Bullet {
             speed(config.getSpeed()),
             damage(config.getDamage()),
             attacker(attacker)
-            {
-                const unsigned int size{config.getSize()};
+        {
+            const unsigned int size{config.getSize()};
 
-                sf::Texture tex{}; 
-                tex.create(size, size);
+            sf::Texture tex{}; 
+            tex.create(size, size);
 
-                sprite.setTexture(tex);
-                sprite.setPosition(turret.getPosition());
-                sprite.setRotation(turret.getRotation());
-                sprite.setColor(sf::Color::White);
-                sprite.setOrigin(size / 2, size / 2);
-                sprite.setScale(1.5, 1.5);
+            sprite.setTexture(tex);
+            sprite.setPosition(turret.getPosition());
+            sprite.setRotation(turret.getRotation());
+            sprite.setColor(sf::Color::White);
+            sprite.setOrigin(size / 2, size / 2);
+            sprite.setScale(1.5, 1.5);
 
-                //move to firepoint
-                movement = getMoveVector(speed);
-                sprite.move(25 * 1.5 * movement.x / speed, 25 * 1.5 * movement.y / speed);
-            };
+            //move to firepoint
+            movement = getMoveVector(speed);
+            sprite.move(25 * 1.5 * movement.x / speed, 25 * 1.5 * movement.y / speed);
+        };
+        
         void move();
 
         sf::Sprite getSprite();

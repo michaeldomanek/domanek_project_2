@@ -3,12 +3,14 @@
 #include "bullet.h"
 #include "robot.h"
 #include "bulletConfiguration.h"
+#include "robotStartConfiguration.h"
 
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <random>
 #include <algorithm>
 #include <iostream>
+#include <chrono>
 
 class Window {
     private:
@@ -21,7 +23,7 @@ class Window {
         sf::FloatRect border;
         sf::RenderWindow window;
 
-        sf::Vector2f startPositions[4];
+        std::vector<RobotStartConfiguration> startConfigs;
 
         sf::Texture explosionTexture;
         sf::Sprite explosion;
@@ -34,19 +36,26 @@ class Window {
             config(config),
             border(0, 0, (float)width, (float)width),
             window(sf::VideoMode(width, width), "Robotgame"),
-            startPositions({{40, 40}, {40, width - 40.0f}, {width - 40.0f, 40}, {width - 40.0f, width - 40.0f}})
-            {
-                window.setFramerateLimit(120);
+            startConfigs({
+                {{40           , 40           }, 135}, 
+                {{40           , width - 40.0f}, 45 },
+                {{width - 40.0f, 40           }, 225},
+                {{width - 40.0f, width - 40.0f}, 315}
+            })
+        {
+            window.setFramerateLimit(120);
 
-                sf::Image icon;
-                icon.loadFromFile("../src/resources/icon.png");
-                window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+            sf::Image icon;
+            icon.loadFromFile("../src/resources/icon.png");
+            window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
-                explosionTexture.loadFromFile("../src/resources/explosion.png");
+            explosionTexture.loadFromFile("../src/resources/explosion.png");
 
-                srand(unsigned(time(NULL)));
-                std::random_shuffle(std::begin(startPositions), std::end(startPositions));
-            }
+            startConfigs.reserve(4);
+
+            unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+            std::shuffle(std::begin(startConfigs), std::end(startConfigs), std::default_random_engine(seed));
+        }
 
     public:
         void addBullet(sf::Sprite turret, Robot* attacker);
@@ -64,7 +73,7 @@ class Window {
         void draw();
         void display();
 
-        sf::Vector2f getAvailablePosition();
+        RobotStartConfiguration getAvailablePosition();
 
         static Window& getInstance(const unsigned int& width=0, const BulletConfiguration& config={0, 0, 0}) {
             static Window instance(width, config);

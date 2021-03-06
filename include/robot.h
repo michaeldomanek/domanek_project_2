@@ -7,6 +7,7 @@ class Bullet;
 #include "window.h"
 #include "robotConfiguration.h"
 #include "robotProperties.h"
+#include "robotStartConfiguration.h"
 
 #include <SFML/Graphics.hpp>
 #include "spdlog/fmt/fmt.h"
@@ -73,9 +74,15 @@ class Robot {
                             border.width - robot.getLocalBounds().width, 
                             border.height - robot.getLocalBounds().height};
             
-            sf::Vector2f pos = window.getAvailablePosition();
+            RobotStartConfiguration startConfig = window.getAvailablePosition();
+
+            sf::Vector2f pos{startConfig.getPosition()};
             robot.setPosition(pos);
             turret.setPosition(pos);
+
+            float rot{startConfig.getRotation()};
+            robot.setRotation(rot);
+            turret.setRotation(rot);
 
             font.loadFromFile("../src/resources/ARIAL.TTF");
             initialiseText(nameText, properties.getName());

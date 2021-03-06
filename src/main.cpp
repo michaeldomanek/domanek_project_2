@@ -65,14 +65,11 @@ int main(int argc, char* argv[]) {
     mt19937 gen{rd()};
     uniform_real_distribution<> dis{1, 10};
 
-    robo.setRotation(135);
-
     robo2.startShooting();
 
     robo3.rotateWeaponRight();
     robo3.startShooting();
     robo3.moveForward();
-    robo3.setRotation(dis(gen) * 2);
 
     while (window.isOpen()) {
         window.clear();

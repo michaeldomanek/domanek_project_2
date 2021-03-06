@@ -1,6 +1,7 @@
 #include "bullet.h"
 #include "window.h"
 #include "robot.h"
+#include "robotStartConfiguration.h"
 
 #include <SFML/Graphics.hpp>
 #include "spdlog/fmt/fmt.h"
@@ -125,7 +126,7 @@ void Window::display() {
     window.display();
 }
 
-sf::Vector2f Window::getAvailablePosition() {
-    static short current{0};
-    return startPositions[current++];
+RobotStartConfiguration Window::getAvailablePosition() {
+    static int current{0};
+    return startConfigs[current++];
 }

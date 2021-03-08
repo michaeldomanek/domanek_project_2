@@ -21,7 +21,7 @@ class Bullet {
         {
             const unsigned int size{config.getSize()};
 
-            sf::Texture tex{}; 
+            sf::Texture tex; 
             tex.create(size, size);
 
             sprite.setTexture(tex);

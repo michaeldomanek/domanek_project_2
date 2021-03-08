@@ -37,4 +37,5 @@ builddir/
 !builddir/.gitkeep
 .vscode/
 old/
+logs/
 

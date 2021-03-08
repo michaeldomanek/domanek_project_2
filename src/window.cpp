@@ -6,9 +6,9 @@
 #include <SFML/Graphics.hpp>
 #include "spdlog/fmt/fmt.h"
 #include "spdlog/fmt/bundled/color.h"
+#include "spdlog/spdlog.h"
 
 #include <vector>
-#include <iostream>
 #include <algorithm>
 
 using namespace std;
@@ -20,9 +20,14 @@ void Window::addBullet(sf::Sprite turret, Robot* attacker) {
 
 void Window::addRobot(Robot *robot) {
     robots.push_back(robot);
-    fmt::print("Robot: ");
-    fmt::print(fg(fmt::color::cyan) | fmt::emphasis::bold, robot->getName());
-    fmt::print(" started playing! [{} / 4] player\n", robots.size());
+
+    string name{robot->getName()};
+    size_t players{robots.size()};
+    string message{"Robot: {0} started playing! [{1} / 4] player{2}"};
+
+    fmt::print(message, fmt::format(fmt::fg(fmt::color::royal_blue), name), players, "\n");
+
+    spdlog::info(message, name, players, "");
 }
 
 void Window::removeRobot(Robot *robot) {
@@ -32,12 +37,24 @@ void Window::removeRobot(Robot *robot) {
     robots.erase(remove(robots.begin(), robots.end(), robot), robots.end());
     deadBodies.push_back(deadRobot);
 
+    string name{robot->getName()};
+    size_t players{robots.size()};
+    string message_dead{"Robot: {0} is dead! [{1} / 4] player left{2}"};
+
+    fmt::print(message_dead, fmt::format(fmt::fg(fmt::color::lime), name), players, "\n");
+
+    spdlog::info(message_dead, name, players, "");
+
     if (robots.size() == 1) {
-        window.close();
-        fmt::print("GAME OVER!\n");
-        fmt::print("Robot: ");
-        fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, robots.back()->getName());
-        fmt::print(" won!\n");
+        string message_gameover{"Robot: {0} won!{1}"};
+        name = robots.back()->getName();
+        
+        fmt::print(fmt::fg(fmt::color::crimson), "===========GAME OVER!===========\n");
+        fmt::print(message_gameover, fmt::format(fmt::fg(fmt::color::orange), name), "\n");
+
+        spdlog::info(message_gameover, name, "");
+
+         window.close();
     }
 }
 

@@ -54,7 +54,7 @@ class Robot {
             config(config),
             window(Window::getInstance())
         {
-            robotTexture.loadFromFile("../src/resources/body-border.png");
+            robotTexture.loadFromFile("../src/resources/body-grey.png");
             turretTexture.loadFromFile("../src/resources/turret.png");
             
             robot.setTexture(robotTexture);

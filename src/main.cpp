@@ -7,7 +7,9 @@
 
 #include "CLI11.hpp"
 #include <SFML/Graphics.hpp>
-#include <iostream>
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/rotating_file_sink.h"
+
 #include <vector>
 #include <math.h>
 #include <random>
@@ -43,6 +45,11 @@ int main(int argc, char* argv[]) {
 
     CLI11_PARSE(app, argc, argv);
 
+    auto file_logger = spdlog::rotating_logger_mt("file_logger", "../logs/server.log", 1048576 * 5, 3);
+    spdlog::set_default_logger(file_logger);
+    spdlog::set_pattern("[%Y %m %d %H:%M:%S,%e] [%l] %v");
+    spdlog::set_level(spdlog::level::debug);
+
     RobotConfiguration config{robotSpeed, health, robotRotation, turretRotation};
     BulletConfiguration bulletConfig{bulletSpeed, bulletDamage, bulletSize};
 
@@ -70,6 +77,8 @@ int main(int argc, char* argv[]) {
     robo3.rotateWeaponRight();
     robo3.startShooting();
     robo3.moveForward();
+
+    spdlog::info("Game started");
 
     while (window.isOpen()) {
         window.clear();

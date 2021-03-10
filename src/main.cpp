@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
     app.add_option("--bullet-damage", bulletDamage, "the damage of the bullets", true);
 
     unsigned int bulletSize{3};
-    app.add_option("--bullet-size", bulletSize, "the size of the bullets in px", true)->check(CLI::Range(1, 10));
+    app.add_option("--bullet-size", bulletSize, "the size of the bullets in px", true); //->check(CLI::Range(1, 10));
 
     float robotSpeed{2};
     app.add_option("--robot-speed", robotSpeed, "the speed of the robots", true)->check(CLI::Range(0.5f, 10.0f));
@@ -43,6 +43,12 @@ int main(int argc, char* argv[]) {
     float turretRotation{1.5};
     app.add_option("--turret-rotation", turretRotation, "the turret roation speed of the robots", true)->check(CLI::Range(0.5f, 5.0f));
 
+    int minFireCountdown{500};
+    app.add_option("-f,--fire-countdown", minFireCountdown, "the time after a robot can shoot again in ms", true)->check(CLI::PositiveNumber);
+
+    unsigned int maxPlayers{4};
+    app.add_option("-m,--max-players", maxPlayers, "the maximum players of the game", true)->check(CLI::Range(2, 4));
+
     CLI11_PARSE(app, argc, argv);
 
     auto file_logger = spdlog::rotating_logger_mt("file_logger", "../logs/server.log", 1048576 * 5, 3);
@@ -50,7 +56,7 @@ int main(int argc, char* argv[]) {
     spdlog::set_pattern("[%Y %m %d %H:%M:%S,%e] [%l] %v");
     spdlog::set_level(spdlog::level::debug);
 
-    RobotConfiguration config{robotSpeed, health, robotRotation, turretRotation};
+    RobotConfiguration config{robotSpeed, health, robotRotation, turretRotation, minFireCountdown};
     BulletConfiguration bulletConfig{bulletSpeed, bulletDamage, bulletSize};
 
     // This properties will be spezified by the client
@@ -58,7 +64,7 @@ int main(int argc, char* argv[]) {
     RobotProperties properties2{"Random Controll", sf::Color::Red};
     RobotProperties properties3{"Change direction on wall hit", sf::Color::Green};
 
-    Window& window{Window::getInstance(width, bulletConfig)};
+    Window& window{Window::getInstance(width, maxPlayers, bulletConfig)};
 
     Robot robo{properties, config};
     Robot robo2{properties2, config};

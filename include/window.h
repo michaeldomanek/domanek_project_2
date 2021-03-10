@@ -14,6 +14,7 @@ class Window {
         std::vector<Robot*> robots;
         std::vector<sf::Sprite> deadBodies;
 
+        unsigned int maxPlayers;
         BulletConfiguration config;
 
         sf::FloatRect border;
@@ -28,7 +29,8 @@ class Window {
         void showAllBullets();
         void showRobots();
 
-        Window(const unsigned int& width, const BulletConfiguration& config):
+        Window(const unsigned int& width, const unsigned int& maxPlayers, const BulletConfiguration& config):
+            maxPlayers(maxPlayers),
             config(config),
             border(0, 0, (float)width, (float)width),
             window(sf::VideoMode(width, width), "Robotgame"),
@@ -61,8 +63,8 @@ class Window {
 
         RobotStartConfiguration getAvailablePosition();
 
-        static Window& getInstance(const unsigned int& width=0, const BulletConfiguration& config={0, 0, 0}) {
-            static Window instance(width, config);
+        static Window& getInstance(const unsigned int& width=0, const unsigned int& maxPlayers=0, const BulletConfiguration& config={0, 0, 0}) {
+            static Window instance(width, maxPlayers, config);
             return instance;
         }
 

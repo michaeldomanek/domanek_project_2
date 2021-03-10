@@ -21,13 +21,15 @@ void Window::addBullet(sf::Sprite turret, Robot* attacker) {
 void Window::addRobot(Robot *robot) {
     robots.push_back(robot);
 
+    //todo check for maxPlayers
+
     string name{robot->getName()};
     size_t players{robots.size()};
-    string message{"Robot: {0} started playing! [{1} / 4] player{2}"};
+    string message{"Robot: {0} started playing! [{1} / {2}] player{3}"};
 
-    fmt::print(message, fmt::format(fmt::fg(fmt::color::royal_blue), name), players, "\n");
+    fmt::print(message, fmt::format(fmt::fg(fmt::color::royal_blue), name), players, maxPlayers, "\n");
 
-    spdlog::info(message, name, players, "");
+    spdlog::info(message, name, players, maxPlayers,"");
 }
 
 void Window::removeRobot(Robot *robot) {
@@ -39,11 +41,11 @@ void Window::removeRobot(Robot *robot) {
 
     string name{robot->getName()};
     size_t players{robots.size()};
-    string message_dead{"Robot: {0} is dead! [{1} / 4] player left{2}"};
+    string message_dead{"Robot: {0} is dead! [{1} / {2}] player left{3}"};
 
-    fmt::print(message_dead, fmt::format(fmt::fg(fmt::color::lime), name), players, "\n");
+    fmt::print(message_dead, fmt::format(fmt::fg(fmt::color::lime), name), players, maxPlayers, "\n");
 
-    spdlog::info(message_dead, name, players, "");
+    spdlog::info(message_dead, name, players, maxPlayers, "");
 
     if (robots.size() == 1) {
         string message_gameover{"Robot: {0} won!{1}"};

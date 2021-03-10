@@ -6,13 +6,15 @@ class RobotConfiguration {
         const float health;
         const float robotRotation;
         const float turretRotation;
+        const int minFireCountdown;
 
     public:
-        RobotConfiguration(float speed, float health, float robotRotation, float turretRotation):
+        RobotConfiguration(float speed, float health, float robotRotation, float turretRotation, int minFireCountdown):
         speed(speed),
         health(health),
         robotRotation(robotRotation),
-        turretRotation(turretRotation)
+        turretRotation(turretRotation),
+        minFireCountdown(minFireCountdown)
         {}
 
         float getSpeed() {
@@ -29,5 +31,9 @@ class RobotConfiguration {
 
         float getTurretRotation() {
             return turretRotation;
+        }
+
+        int getMinFireCountdown() {
+            return minFireCountdown;
         }
 };

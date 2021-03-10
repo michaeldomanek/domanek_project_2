@@ -4,6 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "spdlog/fmt/fmt.h"
+#include "spdlog/spdlog.h"
 
 #include <string>
 #include <math.h>
@@ -101,7 +102,7 @@ void Robot::stopRotateWeapon() {
 }
 
 void Robot::shoot() {
-    if (wantToShoot && fireCountdown.getElapsedTime().asMilliseconds() > 500) {
+    if (wantToShoot && fireCountdown.getElapsedTime().asMilliseconds() > config.getMinFireCountdown()) {
         window.addBullet(turret, this);
         fireCountdown.restart();
     }
@@ -125,6 +126,8 @@ void Robot::performActions() {
 void Robot::substractHealth(float damage) {
     health -= damage;
     healthText.setString(fmt::format("{:.1f}", health));
+
+    spdlog::debug("Robot: {0} got {1} damage", properties.getName(), damage);
 
     if (health <= 0) {
         window.removeRobot(this);

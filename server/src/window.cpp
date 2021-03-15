@@ -13,6 +13,22 @@
 
 using namespace std;
 
+Window::Window(const unsigned int& width, const unsigned int& maxPlayers, const BulletConfiguration& config):
+    maxPlayers(maxPlayers),
+    config(config),
+    border(0, 0, (float)width, (float)width),
+    window(sf::VideoMode(width, width), "Robotgame"),
+    startConfigs(RobotStartConfiguration::getStartConfigs(width))
+{
+    window.setFramerateLimit(120);
+
+    sf::Image icon;
+    icon.loadFromFile("../server/src/resources/icon.png");
+    window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
+    explosionTexture.loadFromFile("../server/src/resources/explosion.png");
+}
+
 void Window::addBullet(sf::Sprite turret, Robot* attacker) {
     Bullet bullet{turret, attacker, config};
     bullets.push_back(bullet);

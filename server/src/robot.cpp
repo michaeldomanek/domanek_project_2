@@ -12,6 +12,52 @@
 
 using namespace std;
 
+Robot::Robot(RobotProperties properties, RobotConfiguration config):
+    health(config.getHealth()),
+    properties(properties),
+    config(config),
+    window(Window::getInstance())
+{
+    robotTexture.loadFromFile("../server/src/resources/body-grey.png");
+    turretTexture.loadFromFile("../server/src/resources/turret.png");
+    
+    robot.setTexture(robotTexture);
+    turret.setTexture(turretTexture);
+    
+    robot.setOrigin(robot.getLocalBounds().width / 2, robot.getLocalBounds().height / 2);
+    turret.setOrigin(turret.getLocalBounds().width / 2, turret.getLocalBounds().height / 2);
+
+    robot.setScale(1.5, 1.5);
+    turret.setScale(1.5, 1.5);
+
+    movement = getMoveVector();
+
+    sf::FloatRect border{window.getBorder()};
+    robotBorder = {robot.getLocalBounds().width, 
+                    robot.getLocalBounds().height, 
+                    border.width - robot.getLocalBounds().width, 
+                    border.height - robot.getLocalBounds().height};
+    
+    RobotStartConfiguration startConfig = window.getAvailablePosition();
+
+    sf::Vector2f pos{startConfig.getPosition()};
+    robot.setPosition(pos);
+    turret.setPosition(pos);
+
+    float rot{startConfig.getRotation()};
+    robot.setRotation(rot);
+    turret.setRotation(rot);
+
+    font.loadFromFile("../server/src/resources/ARIAL.TTF");
+    initialiseText(nameText, properties.getName());
+    initialiseText(healthText, fmt::format("{:.1f}", health));
+
+    nameText.setPosition(pos.x, pos.y + robot.getLocalBounds().width * 1.5);
+    healthText.setPosition(pos.x, pos.y - robot.getLocalBounds().width * 1.5);
+
+    turret.setColor(properties.getColor());
+}
+
 void Robot::move() {
     if (moveSign) {
         robot.move(movement.x * moveSign, movement.y * moveSign);

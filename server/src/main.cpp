@@ -5,6 +5,7 @@
 #include "robotProperties.h"
 #include "bulletConfiguration.h"
 
+#include "asio.hpp"
 #include "CLI11.hpp"
 #include <SFML/Graphics.hpp>
 #include "spdlog/spdlog.h"
@@ -13,8 +14,11 @@
 #include <vector>
 #include <math.h>
 #include <random>
+#include <vector>
 
 using namespace std;
+using namespace asio;
+using namespace asio::ip;
 
 int main(int argc, char* argv[]) {
     CLI::App app("Robotgame");
@@ -29,7 +33,7 @@ int main(int argc, char* argv[]) {
     app.add_option("--bullet-damage", bulletDamage, "the damage of the bullets", true);
 
     unsigned int bulletSize{3};
-    app.add_option("--bullet-size", bulletSize, "the size of the bullets in px", true); //->check(CLI::Range(1, 10));
+    app.add_option("--bullet-size", bulletSize, "the size of the bullets in px", true)->check(CLI::Range(1, 10));
 
     float robotSpeed{2};
     app.add_option("--robot-speed", robotSpeed, "the speed of the robots", true)->check(CLI::Range(0.5f, 10.0f));
@@ -49,6 +53,9 @@ int main(int argc, char* argv[]) {
     unsigned int maxPlayers{4};
     app.add_option("-m,--max-players", maxPlayers, "the maximum players of the game", true)->check(CLI::Range(2, 4));
 
+    unsigned short  port{1113};
+    app.add_option("-p,--port", port, "port to connect to", true);
+
     CLI11_PARSE(app, argc, argv);
 
     auto file_logger = spdlog::rotating_logger_mt("file_logger", "../logs/server.log", 1048576 * 5, 3);
@@ -58,6 +65,26 @@ int main(int argc, char* argv[]) {
 
     RobotConfiguration config{robotSpeed, health, robotRotation, turretRotation, minFireCountdown};
     BulletConfiguration bulletConfig{bulletSpeed, bulletDamage, bulletSize};
+    
+    for(unsigned int counter = 0; counter < maxPlayers;){
+        try {
+            io_context ctx;
+            tcp::endpoint ep{tcp::v4(), port};
+            tcp::acceptor acceptor{ctx, ep};
+            
+            acceptor.listen();
+        
+            tcp::iostream strm{acceptor.accept()};
+            string data;
+            strm >> data;
+
+            strm.close();
+            counter++;
+            cout << data << endl;
+        } catch (asio::system_error& e) {
+            return 0;
+        }
+    }
 
     // This properties will be spezified by the client
     RobotProperties properties{"Keyboard Controll", sf::Color::Blue};

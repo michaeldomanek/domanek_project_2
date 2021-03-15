@@ -29,21 +29,7 @@ class Window {
         void showAllBullets();
         void showRobots();
 
-        Window(const unsigned int& width, const unsigned int& maxPlayers, const BulletConfiguration& config):
-            maxPlayers(maxPlayers),
-            config(config),
-            border(0, 0, (float)width, (float)width),
-            window(sf::VideoMode(width, width), "Robotgame"),
-            startConfigs(RobotStartConfiguration::getStartConfigs(width))
-        {
-            window.setFramerateLimit(120);
-
-            sf::Image icon;
-            icon.loadFromFile("../src/resources/icon.png");
-            window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-
-            explosionTexture.loadFromFile("../src/resources/explosion.png");
-        }
+        Window(const unsigned int& width, const unsigned int& maxPlayers, const BulletConfiguration& config);
 
     public:
         void addBullet(sf::Sprite turret, Robot* attacker);

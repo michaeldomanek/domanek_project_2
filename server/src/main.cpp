@@ -4,6 +4,9 @@
 #include "robotConfiguration.h"
 #include "robotProperties.h"
 #include "bulletConfiguration.h"
+#include "base64.h"
+
+#include "robotProperties.pb.h"
 
 #include "asio.hpp"
 #include "CLI11.hpp"
@@ -21,6 +24,8 @@ using namespace asio;
 using namespace asio::ip;
 
 int main(int argc, char* argv[]) {
+    GOOGLE_PROTOBUF_VERIFY_VERSION;
+
     CLI::App app("Robotgame");
 
     unsigned int width{950};
@@ -65,8 +70,10 @@ int main(int argc, char* argv[]) {
 
     RobotConfiguration config{robotSpeed, health, robotRotation, turretRotation, minFireCountdown};
     BulletConfiguration bulletConfig{bulletSpeed, bulletDamage, bulletSize};
+
+    vector<RobotProperties> properties;
     
-    for(unsigned int counter = 0; counter < maxPlayers;){
+    for(unsigned int i = 0; i < maxPlayers; i++){
         try {
             io_context ctx;
             tcp::endpoint ep{tcp::v4(), port};
@@ -78,135 +85,70 @@ int main(int argc, char* argv[]) {
             string data;
             strm >> data;
 
+            RobotPropertiesMessage rpmsg;
+            rpmsg.ParseFromString(Base64::from_base64(data));
+
             strm.close();
-            counter++;
-            cout << data << endl;
+
+            RobotProperties property{rpmsg.name(), sf::Color(rpmsg.color())};
+            properties.push_back(property);
+            
         } catch (asio::system_error& e) {
             return 0;
         }
     }
 
-    // This properties will be spezified by the client
-    RobotProperties properties{"Keyboard Controll", sf::Color::Blue};
-    RobotProperties properties2{"Random Controll", sf::Color::Red};
-    RobotProperties properties3{"Change direction on wall hit", sf::Color::Green};
+    google::protobuf::ShutdownProtobufLibrary();
 
     Window& window{Window::getInstance(width, maxPlayers, bulletConfig)};
 
-    Robot robo{properties, config};
-    Robot robo2{properties2, config};
-    Robot robo3{properties3, config};
+    vector<Robot*> robots;
 
-    window.addRobot(&robo);
-    window.addRobot(&robo2);
-    window.addRobot(&robo3);
-
-    random_device rd;
-    mt19937 gen{rd()};
-    uniform_real_distribution<> dis{1, 10};
-
-    robo2.startShooting();
-
-    robo3.rotateWeaponRight();
-    robo3.startShooting();
-    robo3.moveForward();
+    for(RobotProperties property: properties) {
+        Robot* robo = new Robot(property, config);
+        robots.push_back(robo);
+        window.addRobot(robo);
+        robo->startShooting();
+        robo->moveForward();
+    }
 
     spdlog::info("Game started");
 
     while (window.isOpen()) {
         window.clear();
 
-        // Robot 1
-
-        if (!robo.isDead()) {
-            robo.stopMove();
-            robo.stopRotate();
-            robo.stopRotateWeapon();
-            robo.stopShooting();
-
-            if (sf::Keyboard::isKeyPressed( sf::Keyboard::A )) {
-                robo.rotateLeft();
-            } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::D )) {
-                robo.rotateRight();
-            }
-
-            if (sf::Keyboard::isKeyPressed( sf::Keyboard::W )) {
-                robo.moveForward();
-            } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::S )) {
-                robo.moveBackward();
-            }
-
-            if (sf::Keyboard::isKeyPressed( sf::Keyboard::Q )) {
-                robo.rotateWeaponLeft();
-            } else if (sf::Keyboard::isKeyPressed( sf::Keyboard::E )) {
-                robo.rotateWeaponRight();
-            }
-
-            if (sf::Keyboard::isKeyPressed( sf::Keyboard::Space )) {
-                robo.startShooting();
-            }
-
-            robo.performActions();
-        }
-
-        // Robot 2
-
-        if (!robo2.isDead()) {
-            double rand{dis(gen)};
-
-            if (rand <= 2) {
-                robo2.rotateLeft();
-            } else if (rand <= 7) {
-                robo2.rotateRight();
-            } else {
-                robo2.stopRotate();
-            }
-
-            double rand2{dis(gen)};
-
-            if (rand2 <= 6) {
-                robo2.moveForward();
-            } else if (rand2 <= 7) {
-                robo2.moveBackward();
-            } else {
-                robo2.stopMove();
-            }
-
-            robo2.performActions();
-        }
-
-        // Robot 3
-
-        if (!robo3.isDead()) {
-            if (robo3.getPosition().x < 100) {
-                if(robo3.getRotation() < 270) {
-                    robo3.rotateLeft();
+        for(Robot* robo: robots) {
+            if (!robo->isDead()) {
+                if (robo->getPosition().x < 100) {
+                    if(robo->getRotation() < 270) {
+                        robo->rotateLeft();
+                    } else {
+                        robo->rotateRight();
+                    }
+                } else if (robo->getPosition().y < 100) {
+                    if(robo->getRotation() > 180) {
+                        robo->rotateLeft();
+                    } else {
+                        robo->rotateRight();
+                    }
+                } else if (robo->getPosition().x > 850) {
+                    if(robo->getRotation() < 90) {
+                        robo->rotateLeft();
+                    } else {
+                        robo->rotateRight();
+                    }
+                } else if (robo->getPosition().y > 850) {
+                    if(robo->getRotation() < 180) {
+                        robo->rotateLeft();
+                    } else {
+                        robo->rotateRight();
+                    }
                 } else {
-                    robo3.rotateRight();
+                    robo->stopRotate();
                 }
-            } else if (robo3.getPosition().y < 100) {
-                if(robo3.getRotation() > 180) {
-                    robo3.rotateLeft();
-                } else {
-                    robo3.rotateRight();
-                }
-            } else if (robo3.getPosition().x > 850) {
-                if(robo3.getRotation() < 90) {
-                    robo3.rotateLeft();
-                } else {
-                    robo3.rotateRight();
-                }
-            } else if (robo3.getPosition().y > 850) {
-                if(robo3.getRotation() < 180) {
-                    robo3.rotateLeft();
-                } else {
-                    robo3.rotateRight();
-                }
-            } else {
-                robo3.stopRotate();
-            }
 
-            robo3.performActions();
+                robo->performActions();
+            }
         }
 
         window.moveAllBullets();

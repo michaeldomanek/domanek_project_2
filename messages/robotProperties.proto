@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+message RobotPropertiesMessage {
+  string name = 1;
+  uint32 color = 2;
+}

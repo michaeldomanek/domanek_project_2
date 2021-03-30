@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package robot;
+
+service RobotServer {
+
+    rpc moveForward (RobotRequest) returns (RobotReply) {}
+    rpc moveBackward (RobotRequest) returns (RobotReply) {}
+    rpc stopMove (RobotRequest) returns (RobotReply) {}
+
+    rpc rotateLeft (RobotRequest) returns (RobotReply) {}
+    rpc rotateRight (RobotRequest) returns (RobotReply) {}
+    rpc stopRotate (RobotRequest) returns (RobotReply) {}
+
+    rpc rotateWeaponLeft (RobotRequest) returns (RobotReply) {}
+    rpc rotateWeaponRight (RobotRequest) returns (RobotReply) {}
+    rpc stopRotateWeapon (RobotRequest) returns (RobotReply) {}
+
+    rpc startShooting (RobotRequest) returns (RobotReply) {}
+    rpc stopShooting (RobotRequest) returns (RobotReply) {}
+
+    rpc getPosition (RobotRequest) returns (Position) {}
+    rpc getRotation (RobotRequest) returns (Rotation) {}
+    rpc getEnemyOrientations (RobotRequest) returns (stream Orientation) {}
+}
+
+message RobotRequest {
+    int32 id = 1;
+}
+
+message RobotReply {}
+
+message Position {
+    float x = 1;
+    float y = 2;
+}
+
+message Rotation {
+    float alpha = 1;
+}
+
+message Orientation {
+    Position position = 1;
+    Rotation rotation = 2;
+}

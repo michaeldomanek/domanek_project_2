@@ -24,9 +24,9 @@ protobuf_dep = dependency('protobuf', required : true)
 
 gen = generator(protoc, \
   output    : ['@BASENAME@.pb.cc', '@BASENAME@.pb.h'],
-  arguments : ['--proto_path=@CURRENT_SOURCE_DIR@/messages/', '--cpp_out=@BUILD_DIR@', '@PLAINNAME@'])
+  arguments : ['--proto_path=@CURRENT_SOURCE_DIR@/src/messages/', '--cpp_out=@BUILD_DIR@', '@PLAINNAME@'])
 
-generated = gen.process('messages/robotProperties.proto')
+generated = gen.process('src/messages/robotProperties.proto')
 # end protobuf
 
 # begin grpc: https://grpc.io/
@@ -36,31 +36,31 @@ grpc_plugin = find_program('grpc_cpp_plugin', required : true)
 
 gen_grpc = generator(protoc, \
   output    : ['@BASENAME@.pb.cc', '@BASENAME@.pb.h', '@BASENAME@.grpc.pb.cc', '@BASENAME@.grpc.pb.h'],
-  arguments : ['--proto_path=@CURRENT_SOURCE_DIR@/messages/', '--grpc_out=@BUILD_DIR@', '--cpp_out=@BUILD_DIR@',  '@PLAINNAME@', 
+  arguments : ['--proto_path=@CURRENT_SOURCE_DIR@/src/messages/', '--grpc_out=@BUILD_DIR@', '--cpp_out=@BUILD_DIR@',  '@PLAINNAME@', 
                '--plugin=protoc-gen-grpc=' + grpc_plugin.path()]
 )
 
-grpc_generated = gen_grpc.process('messages/robotServer.proto')
+grpc_generated = gen_grpc.process('src/messages/robotServer.proto')
 #end grpc
 
-inc_dir_server = include_directories('server/include')
-src_server = ['server/src/main.cpp', 'server/src/bullet.cpp', 'server/src/robot.cpp', 'server/src/window.cpp',
+inc_dir = include_directories('include')
+
+src_server = ['src/server_src/main.cpp', 'src/server_src/bullet.cpp', 'src/server_src/robot.cpp', 'src/server_src/window.cpp',
                generated, grpc_generated]
 
-inc_dir_client = include_directories('client/include')
-src_client = ['client/src/main.cpp', generated, grpc_generated]
+src_client = ['src/client_src/main.cpp', generated, grpc_generated]
 
 graphics = dependency('sfml-graphics')
 window = dependency('sfml-window')
 
 executable('robo-server',
            sources : src_server,
-           include_directories : inc_dir_server,
+           include_directories : inc_dir,
            dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_dep, grpc_cpp_dep]
 )
 
 executable('robo-client',
            sources : src_client,
-           include_directories : [inc_dir_client, inc_dir_server],
+           include_directories : inc_dir,
            dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_dep, grpc_cpp_dep]
 )

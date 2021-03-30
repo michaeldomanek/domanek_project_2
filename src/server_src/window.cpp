@@ -23,10 +23,10 @@ Window::Window(const unsigned int& width, const unsigned int& maxPlayers, const 
     window.setFramerateLimit(120);
 
     sf::Image icon;
-    icon.loadFromFile("../server/src/resources/icon.png");
+    icon.loadFromFile("../src/resources/icon.png");
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
-    explosionTexture.loadFromFile("../server/src/resources/explosion.png");
+    explosionTexture.loadFromFile("../src/resources/explosion.png");
 }
 
 void Window::addBullet(sf::Sprite turret, Robot* attacker) {
@@ -49,30 +49,32 @@ void Window::addRobot(Robot *robot) {
 }
 
 void Window::removeRobot(Robot *robot) {
-    sf::Sprite deadRobot{robot->getRobotSprite()};
-    deadRobot.setTexture(explosionTexture);
+    if (robots.size() > 1) {
+        sf::Sprite deadRobot{robot->getRobotSprite()};
+        deadRobot.setTexture(explosionTexture);
 
-    robots.erase(remove(robots.begin(), robots.end(), robot), robots.end());
-    deadBodies.push_back(deadRobot);
+        robots.erase(remove(robots.begin(), robots.end(), robot), robots.end());
+        deadBodies.push_back(deadRobot);
 
-    string name{robot->getName()};
-    size_t players{robots.size()};
-    string message_dead{"Robot: {0} is dead! [{1} / {2}] player left{3}"};
+        string name{robot->getName()};
+        size_t players{robots.size()};
+        string message_dead{"Robot: {0} is dead! [{1} / {2}] player left{3}"};
 
-    fmt::print(message_dead, fmt::format(fmt::fg(fmt::color::lime), name), players, maxPlayers, "\n");
+        fmt::print(message_dead, fmt::format(fmt::fg(fmt::color::lime), name), players, maxPlayers, "\n");
 
-    spdlog::info(message_dead, name, players, maxPlayers, "");
+        spdlog::info(message_dead, name, players, maxPlayers, "");
+    
+        if (robots.size() == 1) {
+            string message_gameover{"Robot: {0} won!{1}"};
+            string winner_name{robots.back()->getName()};
+            
+            fmt::print(fmt::fg(fmt::color::crimson), "===========GAME OVER!===========\n");
+            fmt::print(message_gameover, fmt::format(fmt::fg(fmt::color::orange), winner_name), "\n");
 
-    if (robots.size() == 1) {
-        string message_gameover{"Robot: {0} won!{1}"};
-        name = robots.back()->getName();
-        
-        fmt::print(fmt::fg(fmt::color::crimson), "===========GAME OVER!===========\n");
-        fmt::print(message_gameover, fmt::format(fmt::fg(fmt::color::orange), name), "\n");
+            spdlog::info(message_gameover, winner_name, "");
 
-        spdlog::info(message_gameover, name, "");
-
-         window.close();
+            window.close();
+        }
     }
 }
 

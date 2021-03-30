@@ -18,8 +18,8 @@ Robot::Robot(RobotProperties properties, RobotConfiguration config):
     config(config),
     window(Window::getInstance())
 {
-    robotTexture.loadFromFile("../server/src/resources/body-grey.png");
-    turretTexture.loadFromFile("../server/src/resources/turret.png");
+    robotTexture.loadFromFile("../src/resources/body-grey.png");
+    turretTexture.loadFromFile("../src/resources/turret.png");
     
     robot.setTexture(robotTexture);
     turret.setTexture(turretTexture);
@@ -46,7 +46,7 @@ Robot::Robot(RobotProperties properties, RobotConfiguration config):
     robot.setRotation(rot);
     turret.setRotation(rot);
 
-    font.loadFromFile("../server/src/resources/ARIAL.TTF");
+    font.loadFromFile("../src/resources/ARIAL.TTF");
     initialiseText(nameText, properties.getName());
     initialiseText(healthText, fmt::format("{:.1f}", health));
 

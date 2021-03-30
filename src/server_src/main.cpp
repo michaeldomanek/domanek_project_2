@@ -14,6 +14,8 @@
 #include <SFML/Graphics.hpp>
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/rotating_file_sink.h"
+#include "spdlog/fmt/fmt.h"
+#include "spdlog/fmt/bundled/color.h"
 
 #include <vector>
 #include <math.h>
@@ -112,10 +114,11 @@ int main(int argc, char* argv[]) {
         Robot* robo = new Robot(property, config);
         robots.push_back(robo);
         window.addRobot(robo);
+        robo->startShooting();
     }
 
     spdlog::info("Game started");
-    fmt::print("Game started");
+    fmt::print(fmt::fg(fmt::color::crimson), "===========GAME STARTED!===========\n");
 
     std::thread t1{[&robots]{
         Robot_RPC_Server service{robots};
@@ -130,6 +133,11 @@ int main(int argc, char* argv[]) {
     for(const auto strm: streams) {
         (*strm) << "start\n";
     }
+
+    for (auto p : streams) {
+        p->clear();
+    } 
+    streams.clear();
 
     while (window.isOpen()) {
         window.clear();
@@ -146,6 +154,10 @@ int main(int argc, char* argv[]) {
         window.handleEvent();
         window.draw();     
         window.display();
+    }
+
+    for (auto p : robots) {
+        delete p;
     }
 
     t1.join();

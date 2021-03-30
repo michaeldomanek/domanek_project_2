@@ -30,8 +30,6 @@ Robot::Robot(RobotProperties properties, RobotConfiguration config):
     robot.setScale(1.5, 1.5);
     turret.setScale(1.5, 1.5);
 
-    movement = getMoveVector();
-
     sf::FloatRect border{window.getBorder()};
     robotBorder = {robot.getLocalBounds().width, 
                     robot.getLocalBounds().height, 
@@ -56,6 +54,8 @@ Robot::Robot(RobotProperties properties, RobotConfiguration config):
     healthText.setPosition(pos.x, pos.y - robot.getLocalBounds().width * 1.5);
 
     turret.setColor(properties.getColor());
+
+    movement = getMoveVector();
 }
 
 void Robot::move() {

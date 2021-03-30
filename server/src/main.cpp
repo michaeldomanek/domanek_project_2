@@ -6,7 +6,8 @@
 #include "bulletConfiguration.h"
 #include "base64.h"
 
-#include "robotProperties.pb.h"
+#include "grpcServer.h"
+#include <grpcpp/health_check_service_interface.h>
 
 #include "asio.hpp"
 #include "CLI11.hpp"
@@ -17,7 +18,8 @@
 #include <vector>
 #include <math.h>
 #include <random>
-#include <vector>
+#include <thread>
+
 
 using namespace std;
 using namespace asio;
@@ -72,7 +74,8 @@ int main(int argc, char* argv[]) {
     BulletConfiguration bulletConfig{bulletSpeed, bulletDamage, bulletSize};
 
     vector<RobotProperties> properties;
-    
+    vector<tcp::iostream*> streams;
+
     for(unsigned int i = 0; i < maxPlayers; i++){
         try {
             io_context ctx;
@@ -81,24 +84,25 @@ int main(int argc, char* argv[]) {
             
             acceptor.listen();
         
-            tcp::iostream strm{acceptor.accept()};
+            tcp::iostream* strm{new tcp::iostream(acceptor.accept())};
             string data;
-            strm >> data;
+            *strm >> data;
+            *strm << i << "\n";
+            
 
             RobotPropertiesMessage rpmsg;
             rpmsg.ParseFromString(Base64::from_base64(data));
 
-            strm.close();
+            streams.push_back(strm);
 
             RobotProperties property{rpmsg.name(), sf::Color(rpmsg.color())};
             properties.push_back(property);
+            
             
         } catch (asio::system_error& e) {
             return 0;
         }
     }
-
-    google::protobuf::ShutdownProtobufLibrary();
 
     Window& window{Window::getInstance(width, maxPlayers, bulletConfig)};
 
@@ -108,45 +112,30 @@ int main(int argc, char* argv[]) {
         Robot* robo = new Robot(property, config);
         robots.push_back(robo);
         window.addRobot(robo);
-        robo->startShooting();
-        robo->moveForward();
     }
 
     spdlog::info("Game started");
+    fmt::print("Game started");
+
+    std::thread t1{[&robots]{
+        Robot_RPC_Server service{robots};
+        grpc::EnableDefaultHealthCheckService(true);
+        grpc::ServerBuilder builder;
+        builder.AddListeningPort("0.0.0.0:50051", grpc::InsecureServerCredentials());
+        builder.RegisterService(&service);
+        std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+        server->Wait();
+    }};
+
+    for(const auto strm: streams) {
+        (*strm) << "start\n";
+    }
 
     while (window.isOpen()) {
         window.clear();
 
         for(Robot* robo: robots) {
             if (!robo->isDead()) {
-                if (robo->getPosition().x < 100) {
-                    if(robo->getRotation() < 270) {
-                        robo->rotateLeft();
-                    } else {
-                        robo->rotateRight();
-                    }
-                } else if (robo->getPosition().y < 100) {
-                    if(robo->getRotation() > 180) {
-                        robo->rotateLeft();
-                    } else {
-                        robo->rotateRight();
-                    }
-                } else if (robo->getPosition().x > 850) {
-                    if(robo->getRotation() < 90) {
-                        robo->rotateLeft();
-                    } else {
-                        robo->rotateRight();
-                    }
-                } else if (robo->getPosition().y > 850) {
-                    if(robo->getRotation() < 180) {
-                        robo->rotateLeft();
-                    } else {
-                        robo->rotateRight();
-                    }
-                } else {
-                    robo->stopRotate();
-                }
-
                 robo->performActions();
             }
         }
@@ -158,4 +147,6 @@ int main(int argc, char* argv[]) {
         window.draw();     
         window.display();
     }
+
+    t1.join();
 }

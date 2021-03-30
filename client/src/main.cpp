@@ -1,7 +1,8 @@
 #include "connection.h"
+#include "grpcClient.h"
 
 #include "CLI11.hpp"
-// todo: remvoe cli11 from client
+// todo: remove cli11 from client
 
 using namespace std;
 
@@ -20,4 +21,12 @@ int main(int argc, char* argv[]) {
 
     Connection c{port, properties};
 
+    Robot_RPC_Client robotClient(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));
+
+    while(true) {
+        robotClient.moveForward(c.getID());
+        sleep(1);
+        robotClient.stopMove(c.getID());
+        sleep(3);
+    }
 }

@@ -14,6 +14,7 @@ using namespace asio::ip;
 
 class Connection {
     private:
+        int id;
     public:
         Connection(string port, RobotProperties prop) {
 
@@ -26,12 +27,26 @@ class Connection {
                     rpmsg.set_color(prop.getColor().toInteger());
 
                     strm << Base64::to_base64(rpmsg.SerializeAsString()) << endl;
+
+                    string data;
+                    getline(strm, data);
+
+                    id = std::stoi(data);
+                    cout << id << endl;
+
+                    getline(strm, data);
+                    cout << data << endl;
+
                     strm.close();
 
                     google::protobuf::ShutdownProtobufLibrary();
                 }
             } catch (asio::system_error& e) {
-                // return 0;
+                cerr << "error" << endl;
             }
+        }
+
+        int getID() {
+            return id;
         }
 };

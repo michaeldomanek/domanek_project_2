@@ -1,6 +1,19 @@
 * Changelog
 ** [Unreleased]
 
+** [0.1.1] - 2021-03-29
+*** Added
+- Added grpc
+- Added grpcServer
+- Added grpcClient
+- Added grpcServer start thread
+- Added robotClient 
+*** Changed
+-
+*** Removed
+- removed robot2 and robot 3 from main
+
+
 ** [0.1.0] - 2021-03-08
 *** Added
 - Added name of robot above robot (Text)

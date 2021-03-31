@@ -1,5 +1,13 @@
 * Changelog
 ** [Unreleased]
+*** Added
+- Added all robot functions to grpc server / client
+- Added grpcServer/Client cpp file
+*** Changed
+- Changed directory structure
+*** Removed
+- 
+
 
 ** [0.1.1] - 2021-03-29
 *** Added

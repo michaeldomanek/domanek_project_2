@@ -1,62 +1,41 @@
 #pragma once
 
-#include <iostream>
-#include <memory>
-#include <string>
+#include "orientation.h"
 
 #include <grpcpp/grpcpp.h>
 #include "robotServer.grpc.pb.h"
 
-using grpc::ClientContext;
-using grpc::Status;
-using robot::RobotServer;
-using robot::RobotReply;
-using robot::RobotRequest;
+#include <SFML/Graphics.hpp>
+#include <vector>
+
 
 class Robot_RPC_Client {
-    public:
-        Robot_RPC_Client(std::shared_ptr<grpc::Channel> channel)
-            : stub_(RobotServer::NewStub(channel)) {}
-
-        void moveForward(const int& id) {
-            ClientContext context;
-            RobotReply reply;
-            RobotRequest request;
-            request.set_id(id);
-
-            Status status = stub_->moveForward(&context, request, &reply);
-
-            if (!status.ok()) {
-                std::cout << status.error_code() << ": " << status.error_message() << std::endl;
-            }
-        }
-
-        void moveBackward(const int& id) {
-            ClientContext context;
-            RobotReply reply;
-            RobotRequest request;
-            request.set_id(id);
-
-            Status status = stub_->moveBackward(&context, request, &reply);
-
-            if (!status.ok()) {
-                std::cout << status.error_code() << ": " << status.error_message() << std::endl;
-            }
-        }
-
-        void stopMove(const int& id) {
-            ClientContext context;
-            RobotReply reply;
-            RobotRequest request;
-            request.set_id(id);
-
-            Status status = stub_->stopMove(&context, request, &reply);
-
-            if (!status.ok()) {
-                std::cout << status.error_code() << ": " << status.error_message() << std::endl;
-            }
-        }
-
     private:
-        std::unique_ptr<RobotServer::Stub> stub_;
+        std::unique_ptr<robot::RobotServer::Stub> stub;
+        const int id;
+    public:
+        Robot_RPC_Client(std::shared_ptr<grpc::Channel> channel, int id) :
+            stub(robot::RobotServer::NewStub(channel)),
+            id(id)
+            {}
+
+        void moveForward();
+        void moveBackward();
+        void stopMove();
+
+        void rotateLeft();
+        void rotateRight();
+        void stopRotate();
+
+        void rotateWeaponLeft();
+        void rotateWeaponRight();
+        void stopRotateWeapon();
+
+        void startShooting();
+        void stopShooting();
+
+        sf::Vector2f getPosition();
+        float getRotation();
+        float getTurretRotation();
+        std::vector<RobotOrientation> getEnemyOrientations();
 };

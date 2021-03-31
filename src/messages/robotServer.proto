@@ -21,6 +21,7 @@ service RobotServer {
 
     rpc getPosition (RobotRequest) returns (Position) {}
     rpc getRotation (RobotRequest) returns (Rotation) {}
+    rpc getTurretRotation (RobotRequest) returns (Rotation) {}
     rpc getEnemyOrientations (RobotRequest) returns (stream Orientation) {}
 }
 
@@ -42,4 +43,5 @@ message Rotation {
 message Orientation {
     Position position = 1;
     Rotation rotation = 2;
+    Rotation weaponRotation = 3;
 }

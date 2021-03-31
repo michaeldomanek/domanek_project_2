@@ -45,10 +45,11 @@ grpc_generated = gen_grpc.process('src/messages/robotServer.proto')
 
 inc_dir = include_directories('include')
 
-src_server = ['src/server_src/main.cpp', 'src/server_src/bullet.cpp', 'src/server_src/robot.cpp', 'src/server_src/window.cpp',
-               generated, grpc_generated]
+src_server = ['src/server_src/main.cpp', 'src/server_src/bullet.cpp', 
+              'src/server_src/robot.cpp', 'src/server_src/window.cpp',
+              'src/server_src/grpcServer.cpp', generated, grpc_generated]
 
-src_client = ['src/client_src/main.cpp', generated, grpc_generated]
+src_client = ['src/client_src/main.cpp', 'src/client_src/grpcClient.cpp', generated, grpc_generated]
 
 graphics = dependency('sfml-graphics')
 window = dependency('sfml-window')

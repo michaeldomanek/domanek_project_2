@@ -6,6 +6,7 @@
 #include "bulletConfiguration.h"
 #include "base64.h"
 
+#include "robotProperties.pb.h"
 #include "grpcServer.h"
 #include <grpcpp/health_check_service_interface.h>
 
@@ -114,11 +115,10 @@ int main(int argc, char* argv[]) {
         Robot* robo = new Robot(property, config);
         robots.push_back(robo);
         window.addRobot(robo);
-        robo->startShooting();
     }
 
     spdlog::info("Game started");
-    fmt::print(fmt::fg(fmt::color::crimson), "===========GAME STARTED!===========\n");
+    fmt::print(fmt::fg(fmt::color::lawn_green), "===========GAME STARTED!===========\n");
 
     std::thread t1{[&robots]{
         Robot_RPC_Server service{robots};
@@ -159,6 +159,8 @@ int main(int argc, char* argv[]) {
     for (auto p : robots) {
         delete p;
     }
+
+    google::protobuf::ShutdownProtobufLibrary();
 
     t1.join();
 }

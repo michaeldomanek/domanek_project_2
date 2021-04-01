@@ -50,9 +50,12 @@ int main() {
             float weaponRotation{robotClient.getTurretRotation()};
             fmt::print("weapon rotation: {}\n", weaponRotation);
 
-            for (auto orientation : robotClient.getEnemyOrientations()) {
-                fmt::print("x: {} | y: {} | rotation: {} | weapon rotation: {}\n", orientation.getPosition().x, orientation.getPosition().y, 
-                                                                                   orientation.getRotation(), orientation.getTurretRotation());
+            for (auto orientation : robotClient.getEnemiesRobotInformations()) {
+                fmt::print("id: {} | name: {} | x: {} | y: {} | rotation: {} | weapon rotation: {}\n", 
+                    orientation.getID(), orientation.getName(),
+                    orientation.getPosition().x, orientation.getPosition().y, 
+                    orientation.getRotation(), orientation.getTurretRotation()
+                );
             }
 
             sleep(1);

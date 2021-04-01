@@ -136,17 +136,20 @@ grpc::Status Robot_RPC_Server::getTurretRotation(grpc::ServerContext* context, c
     return Status::OK;
 }
 
-Status Robot_RPC_Server::getEnemyOrientations(ServerContext* context, const RobotRequest* request, ServerWriter< Orientation>* writer) {
+Status Robot_RPC_Server::getEnemiesRobotInformations(ServerContext* context, const RobotRequest* request, ServerWriter< Orientation>* writer) {
     (void) context;
 
-    for(Robot* robo: robots) {
+    for(size_t i = 0; i != robots.size(); i++) {
+        Robot* robo{robots[i]};
 
-        if (robo != robots[request->id()]) {
+        if (i != (size_t)request->id() and not robo->isDead()) {
             Orientation orientation;
             Position pos;
             Rotation rotation;
             Rotation turretRotation;
 
+            orientation.set_id(i);
+            orientation.set_name(robo->getName());
             orientation.set_x(robo->getPosition().x);
             orientation.set_y(robo->getPosition().y);
             orientation.set_rotation(robo->getRotation());

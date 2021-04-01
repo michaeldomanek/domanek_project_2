@@ -31,5 +31,5 @@ class Robot_RPC_Server final : public robot::RobotServer::Service {
         grpc::Status getPosition(grpc::ServerContext* context, const robot::RobotRequest* request, robot::Position* response);
         grpc::Status getRotation(grpc::ServerContext* context, const robot::RobotRequest* request, robot::Rotation* response);
         grpc::Status getTurretRotation(grpc::ServerContext* context, const robot::RobotRequest* request, robot::Rotation* response);
-        grpc::Status getEnemyOrientations(grpc::ServerContext* context, const robot::RobotRequest* request, grpc::ServerWriter< robot::Orientation>* writer);
+        grpc::Status getEnemiesRobotInformations(grpc::ServerContext* context, const robot::RobotRequest* request, grpc::ServerWriter< robot::Orientation>* writer);
 };

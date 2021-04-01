@@ -202,19 +202,19 @@ float Robot_RPC_Client::getTurretRotation() {
     return reply.alpha();
 }
 
-vector<RobotOrientation> Robot_RPC_Client::getEnemyOrientations() {
+vector<RobotInformation> Robot_RPC_Client::getEnemiesRobotInformations() {
     ClientContext context;
     Orientation reply;
     RobotRequest request;
-    vector<RobotOrientation> orientations;
+    vector<RobotInformation> orientations;
 
     request.set_id(id);
 
-    std::unique_ptr<ClientReader<Orientation>> ptr = stub->getEnemyOrientations(&context, request);
+    std::unique_ptr<ClientReader<Orientation>> ptr = stub->getEnemiesRobotInformations(&context, request);
 
     while(ptr.get()->Read(&reply)) {
         sf::Vector2f pos{reply.x(), reply.y()};
-        orientations.push_back(RobotOrientation(pos, reply.rotation(), reply.weaponrotation()));
+        orientations.push_back(RobotInformation(reply.id(), reply.name(), pos, reply.rotation(), reply.weaponrotation()));
     }
 
     return orientations;

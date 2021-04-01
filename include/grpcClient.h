@@ -1,6 +1,6 @@
 #pragma once
 
-#include "orientation.h"
+#include "robotInformation.h"
 
 #include <grpcpp/grpcpp.h>
 #include "robotServer.grpc.pb.h"
@@ -37,5 +37,5 @@ class Robot_RPC_Client {
         sf::Vector2f getPosition();
         float getRotation();
         float getTurretRotation();
-        std::vector<RobotOrientation> getEnemyOrientations();
+        std::vector<RobotInformation> getEnemiesRobotInformations();
 };

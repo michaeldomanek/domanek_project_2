@@ -22,7 +22,7 @@ service RobotServer {
     rpc getPosition (RobotRequest) returns (Position) {}
     rpc getRotation (RobotRequest) returns (Rotation) {}
     rpc getTurretRotation (RobotRequest) returns (Rotation) {}
-    rpc getEnemyOrientations (RobotRequest) returns (stream Orientation) {}
+    rpc getEnemiesRobotInformations (RobotRequest) returns (stream Orientation) {}
 }
 
 message RobotRequest {
@@ -41,8 +41,10 @@ message Rotation {
 }
 
 message Orientation {
-    float x = 1;
-    float y = 2;
-    float rotation = 3;
-    float weaponRotation = 4;
+    int32 id = 1;
+    string name = 2;
+    float x = 3;
+    float y = 4;
+    float rotation = 5;
+    float weaponRotation = 6;
 }

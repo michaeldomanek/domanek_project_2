@@ -1,5 +1,8 @@
+#pragma once
+
 #include "robotProperties.h"
 #include "base64.h"
+#include "robotInformation.h"
 
 #include "grpcClient.h"
 #include "robotProperties.pb.h"

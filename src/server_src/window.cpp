@@ -60,7 +60,7 @@ void Window::removeRobot(Robot *robot) {
         size_t players{robots.size()};
         string message_dead{"Robot: {0} is dead! [{1} / {2}] player left{3}"};
 
-        fmt::print(message_dead, fmt::format(fmt::fg(fmt::color::lime), name), players, maxPlayers, "\n");
+        fmt::print(message_dead, fmt::format(fmt::fg(fmt::color::orange), name), players, maxPlayers, "\n");
 
         spdlog::info(message_dead, name, players, maxPlayers, "");
     
@@ -68,8 +68,8 @@ void Window::removeRobot(Robot *robot) {
             string message_gameover{"Robot: {0} won!{1}"};
             string winner_name{robots.back()->getName()};
             
-            fmt::print(fmt::fg(fmt::color::crimson), "===========GAME OVER!===========\n");
-            fmt::print(message_gameover, fmt::format(fmt::fg(fmt::color::orange), winner_name), "\n");
+            fmt::print(fmt::fg(fmt::color::crimson), "===========GAME OVER!==============\n");
+            fmt::print(message_gameover, fmt::format(fmt::fg(fmt::color::lime), winner_name), "\n");
 
             spdlog::info(message_gameover, winner_name, "");
 

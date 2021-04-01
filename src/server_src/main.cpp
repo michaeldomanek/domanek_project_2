@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
     }
 
     spdlog::info("Game started");
-    fmt::print(fmt::fg(fmt::color::lawn_green), "===========GAME STARTED!===========\n");
+    fmt::print(fmt::fg(fmt::color::lime), "===========GAME STARTED!===========\n");
 
     std::thread t1{[&robots]{
         Robot_RPC_Server service{robots};

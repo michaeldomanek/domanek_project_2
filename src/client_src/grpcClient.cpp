@@ -213,8 +213,8 @@ vector<RobotOrientation> Robot_RPC_Client::getEnemyOrientations() {
     std::unique_ptr<ClientReader<Orientation>> ptr = stub->getEnemyOrientations(&context, request);
 
     while(ptr.get()->Read(&reply)) {
-        sf::Vector2f pos{reply.position().x(), reply.position().y()};
-        orientations.push_back(RobotOrientation(pos, reply.rotation().alpha(), reply.rotation().alpha()));
+        sf::Vector2f pos{reply.x(), reply.y()};
+        orientations.push_back(RobotOrientation(pos, reply.rotation(), reply.weaponrotation()));
     }
 
     return orientations;

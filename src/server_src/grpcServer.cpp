@@ -140,20 +140,17 @@ Status Robot_RPC_Server::getEnemyOrientations(ServerContext* context, const Robo
     (void) context;
 
     for(Robot* robo: robots) {
+
         if (robo != robots[request->id()]) {
             Orientation orientation;
             Position pos;
             Rotation rotation;
             Rotation turretRotation;
 
-            pos.set_x(robo->getPosition().x);
-            pos.set_y(robo->getPosition().y);
-            rotation.set_alpha(robo->getRotation());
-            turretRotation.set_alpha(robo->getTurretRotation());
-
-            orientation.set_allocated_position(&pos);
-            orientation.set_allocated_rotation(&rotation);
-            orientation.set_allocated_weaponrotation(&turretRotation);
+            orientation.set_x(robo->getPosition().x);
+            orientation.set_y(robo->getPosition().y);
+            orientation.set_rotation(robo->getRotation());
+            orientation.set_weaponrotation(robo->getTurretRotation());
             
             writer->Write(orientation);
         }

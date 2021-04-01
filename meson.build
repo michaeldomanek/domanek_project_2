@@ -30,8 +30,7 @@ generated = gen.process('src/messages/robotProperties.proto')
 # end protobuf
 
 # begin grpc: https://grpc.io/
-grpc_dep = dependency('grpc', required : true)
-grpc_cpp_dep = dependency('grpc++_unsecure', required : true)
+grpc_cpp_dep = dependency('grpc++', required : true)
 grpc_plugin = find_program('grpc_cpp_plugin', required : true)
 
 gen_grpc = generator(protoc, \
@@ -57,11 +56,11 @@ window = dependency('sfml-window')
 executable('robo-server',
            sources : src_server,
            include_directories : inc_dir,
-           dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_dep, grpc_cpp_dep]
+           dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_cpp_dep]
 )
 
 executable('robo-client',
            sources : src_client,
            include_directories : inc_dir,
-           dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_dep, grpc_cpp_dep]
+           dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_cpp_dep]
 )

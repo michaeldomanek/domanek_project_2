@@ -41,7 +41,8 @@ message Rotation {
 }
 
 message Orientation {
-    Position position = 1;
-    Rotation rotation = 2;
-    Rotation weaponRotation = 3;
+    float x = 1;
+    float y = 2;
+    float rotation = 3;
+    float weaponRotation = 4;
 }

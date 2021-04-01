@@ -54,6 +54,8 @@ int main() {
                 fmt::print("x: {} | y: {} | rotation: {} | weapon rotation: {}\n", orientation.getPosition().x, orientation.getPosition().y, 
                                                                                    orientation.getRotation(), orientation.getTurretRotation());
             }
+
+            sleep(1);
         }
     }
     google::protobuf::ShutdownProtobufLibrary();

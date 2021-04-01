@@ -8,7 +8,6 @@
 
 #include "robotProperties.pb.h"
 #include "grpcServer.h"
-#include <grpcpp/health_check_service_interface.h>
 
 #include "asio.hpp"
 #include "CLI11.hpp"
@@ -122,7 +121,6 @@ int main(int argc, char* argv[]) {
 
     std::thread t1{[&robots]{
         Robot_RPC_Server service{robots};
-        grpc::EnableDefaultHealthCheckService(true);
         grpc::ServerBuilder builder;
         builder.AddListeningPort("0.0.0.0:50051", grpc::InsecureServerCredentials());
         builder.RegisterService(&service);

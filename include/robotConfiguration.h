@@ -7,14 +7,17 @@ class RobotConfiguration {
         const float robotRotation;
         const float turretRotation;
         const int minFireCountdown;
+        const bool canNotShootAndMove;
 
     public:
-        RobotConfiguration(float speed, float health, float robotRotation, float turretRotation, int minFireCountdown):
+        RobotConfiguration(float speed, float health, float robotRotation, float turretRotation, 
+                           int minFireCountdown, bool canNotShootAndMove):
         speed(speed),
         health(health),
         robotRotation(robotRotation),
         turretRotation(turretRotation),
-        minFireCountdown(minFireCountdown)
+        minFireCountdown(minFireCountdown),
+        canNotShootAndMove(canNotShootAndMove)
         {}
 
         float getSpeed() {
@@ -35,5 +38,9 @@ class RobotConfiguration {
 
         int getMinFireCountdown() {
             return minFireCountdown;
+        }
+
+        bool canShootAndMove() {
+            return !canNotShootAndMove;
         }
 };

@@ -148,7 +148,10 @@ void Robot::stopRotateWeapon() {
 }
 
 void Robot::shoot() {
-    if (wantToShoot && fireCountdown.getElapsedTime().asMilliseconds() > config.getMinFireCountdown()) {
+    bool isAllowedToShoot{config.canShootAndMove() || not (moveSign or rotateSign or rotateTurretSign)};
+    bool canShoot{fireCountdown.getElapsedTime().asMilliseconds() > config.getMinFireCountdown()};
+
+    if (wantToShoot and canShoot and isAllowedToShoot) {
         window.addBullet(turret, this);
         fireCountdown.restart();
     }

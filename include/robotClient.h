@@ -35,10 +35,8 @@ namespace Game {
                 getline(strm, data);
 
                 int id{std::stoi(data)};
-                cout << id << endl;
 
                 getline(strm, data);
-                cout << data << endl;
 
                 strm.close();
 

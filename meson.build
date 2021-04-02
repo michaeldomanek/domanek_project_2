@@ -48,7 +48,7 @@ src_server = ['src/server_src/main.cpp', 'src/server_src/bullet.cpp',
               'src/server_src/robot.cpp', 'src/server_src/window.cpp',
               'src/server_src/grpcServer.cpp', generated, grpc_generated]
 
-src_client = ['src/client_src/main.cpp', 'src/client_src/grpcClient.cpp', generated, grpc_generated]
+src_client = ['src/client_src/grpc-test.cpp', 'src/client_src/grpcClient.cpp', generated, grpc_generated]
 
 graphics = dependency('sfml-graphics')
 window = dependency('sfml-window')
@@ -59,7 +59,7 @@ executable('robo-server',
            dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_cpp_dep]
 )
 
-executable('robo-client',
+executable('robo-test-client',
            sources : src_client,
            include_directories : inc_dir,
            dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_cpp_dep]

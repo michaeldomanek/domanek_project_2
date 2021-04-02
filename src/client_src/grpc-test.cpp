@@ -12,6 +12,8 @@ int main() {
     int id = Game::connectToGame(port, properties);
 
     if(id >= 0) {
+        fmt::print("Game stated! Robot id: {}\n", id);
+
         Robot_RPC_Client robotClient = Game::getRobot_RPC_Client(grpcPort, id);
 
         robotClient.moveForward();

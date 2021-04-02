@@ -65,14 +65,18 @@ int main(int argc, char* argv[]) {
     unsigned short  port{1113};
     app.add_option("-p,--port", port, "port to connect to", true);
 
+    bool canNotShootAndMove{};
+    app.add_flag("-s,--not-shoot-and-move", canNotShootAndMove, "Robot can not shoot while it is moving");
+
     CLI11_PARSE(app, argc, argv);
 
     auto file_logger = spdlog::rotating_logger_mt("file_logger", "../logs/server.log", 1048576 * 5, 3);
     spdlog::set_default_logger(file_logger);
     spdlog::set_pattern("[%Y %m %d %H:%M:%S,%e] [%l] %v");
     spdlog::set_level(spdlog::level::debug);
+    spdlog::flush_on(spdlog::level::debug);
 
-    RobotConfiguration config{robotSpeed, health, robotRotation, turretRotation, minFireCountdown};
+    RobotConfiguration config{robotSpeed, health, robotRotation, turretRotation, minFireCountdown, canNotShootAndMove};
     BulletConfiguration bulletConfig{bulletSpeed, bulletDamage, bulletSize};
 
     vector<RobotProperties> properties;
@@ -119,14 +123,16 @@ int main(int argc, char* argv[]) {
     spdlog::info("Game started");
     fmt::print(fmt::fg(fmt::color::lime), "===========GAME STARTED!===========\n");
 
-    std::thread t1{[&robots]{
-        Robot_RPC_Server service{robots};
-        grpc::ServerBuilder builder;
-        builder.AddListeningPort("0.0.0.0:50051", grpc::InsecureServerCredentials());
-        builder.RegisterService(&service);
-        std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+    Robot_RPC_Server service{robots};
+    grpc::ServerBuilder builder;
+    builder.AddListeningPort("0.0.0.0:50051", grpc::InsecureServerCredentials());
+    builder.RegisterService(&service);
+    std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+
+    std::thread grpcServerThread{[&server]{
         server->Wait();
     }};
+    grpcServerThread.detach();
 
     for(const auto strm: streams) {
         (*strm) << "start\n";
@@ -158,7 +164,5 @@ int main(int argc, char* argv[]) {
         delete p;
     }
 
-    google::protobuf::ShutdownProtobufLibrary();
-
-    t1.join();
+    google::protobuf::ShutdownProtobufLibrary();    
 }

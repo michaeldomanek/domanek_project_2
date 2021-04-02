@@ -20,7 +20,7 @@ void Robot_RPC_Client::moveForward() {
     Status status = stub->moveForward(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 }
 
@@ -33,7 +33,7 @@ void Robot_RPC_Client::moveBackward() {
     Status status = stub->moveBackward(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 }
 
@@ -46,7 +46,7 @@ void Robot_RPC_Client::Robot_RPC_Client::stopMove() {
     Status status = stub->stopMove(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 }
 
@@ -59,7 +59,7 @@ void Robot_RPC_Client::rotateLeft() {
     Status status = stub->rotateLeft(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 }
 
@@ -72,7 +72,7 @@ void Robot_RPC_Client::rotateRight() {
     Status status = stub->rotateRight(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 }
 
@@ -85,7 +85,7 @@ void Robot_RPC_Client::stopRotate() {
     Status status = stub->stopRotate(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 }
 
@@ -98,7 +98,7 @@ void Robot_RPC_Client::rotateWeaponLeft() {
     Status status = stub->rotateWeaponLeft(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 }
 
@@ -111,7 +111,7 @@ void Robot_RPC_Client::rotateWeaponRight() {
     Status status = stub->rotateWeaponRight(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 }
 
@@ -124,7 +124,7 @@ void Robot_RPC_Client::stopRotateWeapon() {
     Status status = stub->stopRotateWeapon(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 }
 
@@ -137,7 +137,7 @@ void Robot_RPC_Client::startShooting() {
     Status status = stub->startShooting(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 }
 
@@ -150,7 +150,7 @@ void Robot_RPC_Client::stopShooting() {
     Status status = stub->stopShooting(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 }
 
@@ -163,7 +163,7 @@ sf::Vector2f Robot_RPC_Client::getPosition() {
     Status status = stub->getPosition(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
         return sf::Vector2f(-1, -1);
     }
 
@@ -179,8 +179,7 @@ float Robot_RPC_Client::getRotation() {
     Status status = stub->getRotation(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
-        return -1;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 
     return reply.alpha();
@@ -195,8 +194,7 @@ float Robot_RPC_Client::getTurretRotation() {
     Status status = stub->getTurretRotation(&context, request, &reply);
 
     if (!status.ok()) {
-        std::cout << status.error_code() << ": " << status.error_message() << std::endl;
-        return -1;
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 
     return reply.alpha();
@@ -215,6 +213,12 @@ vector<RobotInformation> Robot_RPC_Client::getEnemiesRobotInformations() {
     while(ptr.get()->Read(&reply)) {
         sf::Vector2f pos{reply.x(), reply.y()};
         orientations.push_back(RobotInformation(reply.id(), reply.name(), pos, reply.rotation(), reply.weaponrotation()));
+    }
+
+    Status status = ptr.get()->Finish();
+
+    if (!status.ok()) {
+        throw std::runtime_error(status.error_code() + ": " + status.error_message());
     }
 
     return orientations;

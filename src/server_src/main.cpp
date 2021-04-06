@@ -135,7 +135,15 @@ int main(int argc, char* argv[]) {
     grpcServerThread.detach();
 
     for(const auto strm: streams) {
-        (*strm) << "start\n";
+        RobotConfigurationMessage rcmsg;
+        rcmsg.set_speed(config.getSpeed());
+        rcmsg.set_health(config.getHealth());
+        rcmsg.set_robotrotation(config.getRobotRotation());
+        rcmsg.set_turretrotation(config.getTurretRotation());
+        rcmsg.set_minfirecountdown(config.getMinFireCountdown());
+        rcmsg.set_canshootandmove(config.canShootAndMove());
+
+        (*strm) << Base64::to_base64(rcmsg.SerializeAsString()) << "\n";
     }
 
     for (auto p : streams) {
@@ -164,5 +172,7 @@ int main(int argc, char* argv[]) {
         delete p;
     }
 
-    google::protobuf::ShutdownProtobufLibrary();    
+    google::protobuf::ShutdownProtobufLibrary();
+
+    server->Shutdown(); 
 }

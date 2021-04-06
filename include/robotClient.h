@@ -1,8 +1,9 @@
 #pragma once
 
-#include "robotProperties.h"
 #include "base64.h"
+#include "robotProperties.h"
 #include "robotInformation.h"
+#include "robotConfiguration.h"
 
 #include "grpcClient.h"
 #include "robotProperties.pb.h"
@@ -20,7 +21,8 @@ using namespace asio;
 using namespace asio::ip;
 
 namespace Game {
-    int connectToGame(string port, RobotProperties prop) {
+    int connectToGame(string port, RobotProperties prop, RobotConfiguration& config) {
+
         try {
             tcp::iostream strm{"localhost", port};
 
@@ -29,7 +31,7 @@ namespace Game {
                 rpmsg.set_name(prop.getName());
                 rpmsg.set_color(prop.getColor().toInteger());
 
-                strm << Base64::to_base64(rpmsg.SerializeAsString()) << endl;
+                strm << Base64::to_base64(rpmsg.SerializeAsString()) << "\n";
 
                 string data;
                 getline(strm, data);
@@ -37,6 +39,14 @@ namespace Game {
                 int id{std::stoi(data)};
 
                 getline(strm, data);
+
+                RobotConfigurationMessage rcmsg;
+                rcmsg.ParseFromString(Base64::from_base64(data));
+
+                fmt::print("speed. {}\n", rcmsg.speed());
+
+                config = {rcmsg.speed(), rcmsg.health(), rcmsg.robotrotation(), rcmsg.turretrotation(), 
+                                            rcmsg.minfirecountdown(), rcmsg.canshootandmove()};
 
                 strm.close();
 

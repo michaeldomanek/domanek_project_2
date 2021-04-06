@@ -2,14 +2,16 @@
 
 class RobotConfiguration {
     private:
-        const float speed;
-        const float health;
-        const float robotRotation;
-        const float turretRotation;
-        const int minFireCountdown;
-        const bool canNotShootAndMove;
+        float speed;
+        float health;
+        float robotRotation;
+        float turretRotation;
+        int minFireCountdown;
+        bool canNotShootAndMove;
 
     public:
+        RobotConfiguration(): RobotConfiguration(0, 0, 0, 0, 0, true) {}
+
         RobotConfiguration(float speed, float health, float robotRotation, float turretRotation, 
                            int minFireCountdown, bool canNotShootAndMove):
         speed(speed),

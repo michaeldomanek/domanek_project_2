@@ -4,3 +4,12 @@ message RobotPropertiesMessage {
   string name = 1;
   uint32 color = 2;
 }
+
+message RobotConfigurationMessage {
+  float speed = 1;
+  float health = 2;
+  float robotRotation = 3;
+  float turretRotation = 4;
+  int32 minFireCountdown = 5;
+  bool canShootAndMove = 6;
+}

@@ -9,7 +9,14 @@ int main() {
 
     RobotProperties properties{name, sf::Color::Blue};
 
-    int id = Game::connectToGame(port, properties);
+    RobotConfiguration config;
+
+    int id = Game::connectToGame(port, properties, config);
+
+    fmt::print("speed: {}, health: {}, rotation: {}, turret: {}, fire: {}, shoot-move: {}\n", 
+               config.getSpeed(), config.getHealth(), config.getRobotRotation(), 
+               config.getTurretRotation(), config.getMinFireCountdown(), config.canShootAndMove()
+    );
 
     if(id >= 0) {
         fmt::print("Game stated! Robot id: {}\n", id);

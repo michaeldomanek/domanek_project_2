@@ -48,7 +48,11 @@ src_server = ['src/server_src/main.cpp', 'src/server_src/bullet.cpp',
               'src/server_src/robot.cpp', 'src/server_src/window.cpp',
               'src/server_src/grpcServer.cpp', generated, grpc_generated]
 
-src_client = ['src/client_src/grpc-test.cpp', 'src/client_src/grpcClient.cpp', generated, grpc_generated]
+src_domanek   = ['src/client_src/domanek.cpp'      , 'src/client_src/grpcClient.cpp', generated, grpc_generated]
+src_domanekV2 = ['src/client_src/domanekV2.cpp'    , 'src/client_src/grpcClient.cpp', generated, grpc_generated]
+src_client    = ['src/client_src/grpc-test.cpp'    , 'src/client_src/grpcClient.cpp', generated, grpc_generated]
+src_rect      = ['src/client_src/rect-client.cpp'  , 'src/client_src/grpcClient.cpp', generated, grpc_generated]
+src_random    = ['src/client_src/random-client.cpp', 'src/client_src/grpcClient.cpp', generated, grpc_generated]
 
 graphics = dependency('sfml-graphics')
 window = dependency('sfml-window')
@@ -59,8 +63,32 @@ executable('robo-server',
            dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_cpp_dep]
 )
 
-executable('robo-test-client',
+executable('domanek',
+           sources : src_domanek,
+           include_directories : inc_dir,
+           dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_cpp_dep]
+)
+
+executable('domanekV2',
+           sources : src_domanekV2,
+           include_directories : inc_dir,
+           dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_cpp_dep]
+)
+
+executable('test-client',
            sources : src_client,
+           include_directories : inc_dir,
+           dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_cpp_dep]
+)
+
+executable('rect-client',
+           sources : src_rect,
+           include_directories : inc_dir,
+           dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_cpp_dep]
+)
+
+executable('random-client',
+           sources : src_random,
            include_directories : inc_dir,
            dependencies : [thread_dep, graphics, window, protobuf_dep, grpc_cpp_dep]
 )

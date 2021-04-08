@@ -27,10 +27,10 @@ class RobotStartConfiguration {
 
         static std::vector<RobotStartConfiguration> getStartConfigs(unsigned int width) {
             std::vector<RobotStartConfiguration> startConfigs{
-                {{40           , 40           }, 135}, 
-                {{40           , width - 40.0f}, 45 },
-                {{width - 40.0f, 40           }, 225},
-                {{width - 40.0f, width - 40.0f}, 315}
+                {{40           , 40           }, 125}, 
+                {{40           , width - 40.0f},  35},
+                {{width - 40.0f, 40           }, 215},
+                {{width - 40.0f, width - 40.0f}, 305}
             };
 
             auto seed = std::chrono::system_clock::now().time_since_epoch().count();

@@ -43,8 +43,6 @@ namespace Game {
                 RobotConfigurationMessage rcmsg;
                 rcmsg.ParseFromString(Base64::from_base64(data));
 
-                fmt::print("speed. {}\n", rcmsg.speed());
-
                 config = {rcmsg.speed(), rcmsg.health(), rcmsg.robotrotation(), rcmsg.turretrotation(), 
                                             rcmsg.minfirecountdown(), rcmsg.canshootandmove()};
 

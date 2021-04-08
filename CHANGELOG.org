@@ -3,6 +3,7 @@
 *** Added
 - Added all robot functions to grpc server / client
 - Added grpcServer/Client cpp file
+- Add 4 example clients
 *** Changed
 - Changed directory structure
 *** Removed

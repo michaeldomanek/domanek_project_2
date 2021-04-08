@@ -29,10 +29,15 @@ In dem CLient kann man dem Roboter folgende Befehle schicken
 - man kann die eigene Position, Rotation und Geschützturmrotation erhalten
 - man kann die ID, Name, Position, Rotation und Geschützturmrotation aller Gegnererhalten
 
-Nachdem der Server gestartet wurde und können alle Clients beitreten.
+Nachdem der Server gestartet wurde, können alle Clients beitreten.
+Der Client legt seinen Namen und seine Farbe fest und schickt diese an den Server.
 Sobald die maximale Anzahl der Spieler (-m,--max-players) erreicht wurde startet das Spiel.
 Alle Clients bekommen ihre ID und die Roboter-Konfiguration.
-Diese Konfiguration enhält die Geschwindigkeit, die Lebenspunkte, die Geschützturm- / Roboterrotationsgeschwindikeit, in welchem Abstand man schießen kann und ob man während dem Fahren schießen kann.
+Diese Konfiguration enhält die Geschwindigkeit, die Lebenspunkte, die Geschützturm- / Roboterrotationsgeschwindikeit, 
+in welchem Abstand man schießen kann und ob man während dem Fahren schießen kann.
+Das Spiel startet auch gleichzeitig und der RPC-Server wurde erstellt nun kann man die oben erwähten Befehle an den Server schicken.
+
+Der Server startet nicht nur die grafische Oberfläche sondern zeigt auch im Terminal an, wenn Spielen beitreten und wenn Roboter sterben und am Ende wer gewonnen hat.
 
 ## einfaches Testen
 Für den einfachsten Tests ob alles funktioniert benötigt man 3 Terminals in dem man jeweils einen dieser Befehle ausführt:

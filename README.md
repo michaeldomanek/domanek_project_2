@@ -29,11 +29,13 @@ Usage: ./robo-server [OPTIONS]
 | -m,--max-players         | UINT:INT in [2 - 4]=4         | the maximum players of the game              |
 | -p,--port                | UINT=1113                     | port to connect to                           |
 | -s,--not-shoot-and-move  | FLAG                          | Robot can not shoot while it is moving       |
+| -j,--json-config         | TEXT:FILE                     | JSON Configuration for port, max-player, ... |
 
 ## verwendete Software
 * [asio](https://think-async.com/Asio/)
 * [CLI11](https://github.com/CLIUtils/CLI11)
 * [fmt](https://github.com/fmtlib/fmt)
+* [json](https://github.com/nlohmann/json)
 * [spdlog](https://github.com/gabime/spdlog)
 
 * [protocol-buffers](https://developers.google.com/protocol-buffers/)

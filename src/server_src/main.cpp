@@ -9,6 +9,7 @@
 #include "robotProperties.pb.h"
 #include "grpcServer.h"
 
+#include "json.hpp"
 #include "asio.hpp"
 #include "CLI11.hpp"
 #include <SFML/Graphics.hpp>
@@ -26,6 +27,16 @@
 using namespace std;
 using namespace asio;
 using namespace asio::ip;
+using json = nlohmann::json;
+
+auto throwValidationError(const CLI::App &app, const string &error) {
+    try {
+        spdlog::error(error);
+        throw CLI::ValidationError(error);
+    } catch (const CLI::Error &e) {
+        return app.exit(e);
+    }
+}
 
 int main(int argc, char* argv[]) {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -68,7 +79,33 @@ int main(int argc, char* argv[]) {
     bool canNotShootAndMove{};
     app.add_flag("-s,--not-shoot-and-move", canNotShootAndMove, "Robot can not shoot while it is moving");
 
+    string jsonConfigPath;
+    app.add_option("-j,--json-config", jsonConfigPath, "JSON Configuration for port, max-player and not-shoot-and-move")->check(CLI::ExistingFile);
+
     CLI11_PARSE(app, argc, argv);
+
+    std::ifstream i(jsonConfigPath);
+    json jsonConfig;
+    i >> jsonConfig;
+
+    if (jsonConfig.contains("max-players")) {
+        if (jsonConfig["max-players"].is_number()) {
+            if(jsonConfig["max-players"] >= 2 and jsonConfig["max-players"] <= 4) {
+                maxPlayers = jsonConfig["max-players"];
+            } else {
+                return throwValidationError(app, "max-players must be between 2 and 4");
+            }
+        } else {
+            return throwValidationError(app, "max-players must be a number");
+        }
+    }
+    if (jsonConfig.contains("not-shoot-and-move")) {
+        if (jsonConfig["not-shoot-and-move"].is_boolean()) {
+            canNotShootAndMove = jsonConfig["not-shoot-and-move"];
+        } else {
+            return throwValidationError(app, "not-shoot-and-move must be a boolean flag");
+        }
+    }
 
     auto file_logger = spdlog::rotating_logger_mt("file_logger", "../logs/server.log", 1048576 * 5, 3);
     spdlog::set_default_logger(file_logger);

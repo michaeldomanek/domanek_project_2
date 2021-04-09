@@ -10,6 +10,42 @@ Das Spiel ist eine abgeänderte Version von [robowiki](https://robowiki.net/wiki
 
 Die Ressourcen für das Spiel wurden von [robocode](https://github.com/robo-code/robocode) verwendet.
 
+Das Spiel beginnt indem man den Game-Serevr startet:
+
+`./robo-server`
+
+Danach startet man in einem neuen Terminal jeweils einen weiteren Client.
+
+1. `./rect-client`
+2. `./random-client`
+3. `./domanek`
+4. `./domanekV2`
+
+In dem CLient kann man dem Roboter folgende Befehle schicken  
+- nach vorne fahren / nach hinten fahren / stoppen
+- nach links drehen / nach rechts drehen / nicht mehr drehen
+- Geschützturm nach links drehen / nach rechts drehen / nicht mehr drehen
+- schießen / nicht mehr schießen
+- man kann die eigene Position, Rotation und Geschützturmrotation erhalten
+- man kann die ID, Name, Position, Rotation und Geschützturmrotation aller Gegnererhalten
+
+Nachdem der Server gestartet wurde, können alle Clients beitreten.
+Der Client legt seinen Namen und seine Farbe fest und schickt diese an den Server.
+Sobald die maximale Anzahl der Spieler (-m,--max-players) erreicht wurde startet das Spiel.
+Alle Clients bekommen ihre ID und die Roboter-Konfiguration.
+Diese Konfiguration enhält die Geschwindigkeit, die Lebenspunkte, die Geschützturm- / Roboterrotationsgeschwindikeit, 
+in welchem Abstand man schießen kann und ob man während dem Fahren schießen kann.
+Das Spiel startet auch gleichzeitig und der RPC-Server wurde erstellt nun kann man die oben erwähten Befehle an den Server schicken.
+
+Der Server startet nicht nur die grafische Oberfläche sondern zeigt auch im Terminal an, wenn Spielen beitreten und wenn Roboter sterben und am Ende wer gewonnen hat.
+
+## einfaches Testen
+Für den einfachsten Tests ob alles funktioniert benötigt man 3 Terminals in dem man jeweils einen dieser Befehle ausführt:
+
+1. `./robo-server -m 2`
+2. `./test-client`
+3. `./test-client`
+
 ## Verwendung
 
 Usage: ./robo-server [OPTIONS]

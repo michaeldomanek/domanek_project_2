@@ -84,28 +84,40 @@ int main(int argc, char* argv[]) {
 
     CLI11_PARSE(app, argc, argv);
 
-    std::ifstream i(jsonConfigPath);
-    json jsonConfig;
-    i >> jsonConfig;
+    
+    if(!jsonConfigPath.empty()) {
+        std::ifstream i(jsonConfigPath);
+        json jsonConfig;
+        i >> jsonConfig;
 
-    if (jsonConfig.contains("max-players")) {
-        if (jsonConfig["max-players"].is_number()) {
-            if(jsonConfig["max-players"] >= 2 and jsonConfig["max-players"] <= 4) {
-                maxPlayers = jsonConfig["max-players"];
+        if (jsonConfig.contains("max-players")) {
+            if (jsonConfig["max-players"].is_number()) {
+                if(jsonConfig["max-players"] >= 2 and jsonConfig["max-players"] <= 4) {
+                    maxPlayers = jsonConfig["max-players"];
+                } else {
+                    return throwValidationError(app, "max-players must be between 2 and 4");
+                }
             } else {
-                return throwValidationError(app, "max-players must be between 2 and 4");
+                return throwValidationError(app, "max-players must be a number");
             }
-        } else {
-            return throwValidationError(app, "max-players must be a number");
+        }
+        if (jsonConfig.contains("not-shoot-and-move")) {
+            if (jsonConfig["not-shoot-and-move"].is_boolean()) {
+                canNotShootAndMove = jsonConfig["not-shoot-and-move"];
+            } else {
+                return throwValidationError(app, "not-shoot-and-move must be a boolean flag");
+            }
+        }
+        if (jsonConfig.contains("port")) {
+            if (jsonConfig["port"].is_boolean()) {
+                port = jsonConfig["port"];
+            } else {
+                return throwValidationError(app, "port must be a integer");
+            }
         }
     }
-    if (jsonConfig.contains("not-shoot-and-move")) {
-        if (jsonConfig["not-shoot-and-move"].is_boolean()) {
-            canNotShootAndMove = jsonConfig["not-shoot-and-move"];
-        } else {
-            return throwValidationError(app, "not-shoot-and-move must be a boolean flag");
-        }
-    }
+
+
 
     auto file_logger = spdlog::rotating_logger_mt("file_logger", "../logs/server.log", 1048576 * 5, 3);
     spdlog::set_default_logger(file_logger);

@@ -6,6 +6,7 @@
 - Added grpcServer/Client cpp file
 - Added 4 example clients
 - Added json to config
+- Added documentation (Ausarbeitung)
 *** Changed
 - Changed directory structure
 *** Removed

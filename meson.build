@@ -1,7 +1,6 @@
-# uncomment as necessary
 project('RobotGame', 'cpp',
         license : ['Boost'],
-        version : '0.1.1',
+        version : '1.0.0',
         default_options : ['cpp_std=c++17', 'warning_level=3', 'werror=true'])
 
 thread_dep = dependency('threads')
